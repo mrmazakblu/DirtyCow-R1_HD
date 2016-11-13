@@ -1,0 +1,2 @@
+dd if=/data/local/test/frp of=/dev/block/mmcblk0p17
+exit

@@ -1,0 +1,6 @@
+mkdir /data/local/test
+/system/bin/chmod 0777 /data/local/test
+cp /dev/block/mmcblk0p17 /data/local/test/frp
+/system/bin/chmod 0777 /data/local/test/frp
+ls -l /data/local/test
+exit
