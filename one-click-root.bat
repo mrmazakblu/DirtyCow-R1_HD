@@ -22,22 +22,22 @@ pause > nul
 adb wait-for-device
 cls
 echo [*] copying dirtycow to /data/local/tmp/dirtycow
-adb push dirtycow /data/local/tmp/dirtycow
+adb push pushed/dirtycow /data/local/tmp/dirtycow
 timeout 2 > nul
 echo [*] copying recowvery-app_process32 to /data/local/tmp/recowvery-app_process32
-adb push recowvery-app_process32 /data/local/tmp/recowvery-app_process32
+adb push pushed/recowvery-app_process32 /data/local/tmp/recowvery-app_process32
 timeout 2 > nul
 echo [*] copying frp.bin to /data/local/tmp/unlock
-adb push frp.bin /data/local/tmp/unlock
+adb push pushed/frp.bin /data/local/tmp/unlock
 timeout 2 > nul
 echo [*] copying busybox to /data/local/tmp/busybox
-adb push busybox /data/local/tmp/busybox
+adb push pushed/busybox /data/local/tmp/busybox
 timeout 2 > nul
 echo [*] copying cp_comands.txt to /data/local/tmp/cp_comands.txt
-adb push cp_comands.txt /data/local/tmp/cp_comands.txt
+adb push pushed/cp_comands.txt /data/local/tmp/cp_comands.txt
 timeout 2 > nul
 echo [*] copying dd_comands.txt to /data/local/tmp/dd_comands.txt
-adb push dd_comands.txt /data/local/tmp/dd_comands.txt
+adb push pushed/dd_comands.txt /data/local/tmp/dd_comands.txt
 timeout 2 > nul
 echo [*] changing permissions on copied files
 adb shell chmod 0777 /data/local/tmp/*
@@ -142,7 +142,7 @@ echo.---------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] PRESS ANY KEY TO FLASH RECOVERY
 pause > nul
-fastboot flash recovery recovery.img
+fastboot flash recovery pushed/recovery.img
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
 ECHO [*]
 echo [*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES
