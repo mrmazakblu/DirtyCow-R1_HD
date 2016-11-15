@@ -18,7 +18,7 @@ echo [*]
 echo [*] IF DEVICE IS LISTED PRESS ANY KEY ON COMPUTER TO START
 echo [*]
 adb devices
-pause > nul
+pause
 adb wait-for-device
 cls
 echo [*] copying dirtycow to /data/local/tmp/dirtycow
@@ -54,6 +54,7 @@ cls
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*]WAITING 60 SECONDS FOR ROOT SHELL TO SPAWN
+echo [*] WHILE APP_PROCESS IS REPLACED PHONE WILL APPEAR TO BE UNRESPONSIVE BUT SHELL IS WORKING
 timeout 60 > nul
 echo.--------------------------------------------------------------------------------------------
 echo [*] OPENING A ROOT SHELL ON THE NEWLY CREATED SYSTEM_SERVER
@@ -91,7 +92,7 @@ echo [*]
 echo [*] IF RESPONSE IS A BLANK LINE YOU DO NOT HAVE DRIVER NEEDED TO CONTINUE. CLOSE THIS WINDOW
 echo [*] AND GET FASTBOOT DRIVERS THEN EITHER RUN "fastboot oem unlock" IN TERMINAL
 fastboot devices
-pause > nul 
+pause
 cls
 echo [*] NOW THAT THE DEVICE IS IN FASTBOOT MODE WE ARE GOING TO UNLOCK THE
 echo [*] BOOTLOADER. ON THE NEXT SCREEN ON YOUR PHONE YOU WILL SEE 
@@ -100,15 +101,15 @@ echo [*] JUST PRESS VOLUME UP TO START THE UNLOCK PROCESS.
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] PRESS ANY KEY ON COMPUTER TO START THE UNLOCK
-pause > nul
+pause
 fastboot oem unlock
 cls
 echo [*] ONCE THE BOOTLOADER IS UNLOCKED PRESS ANY KEY TO WIPE DATA
-pause > nul
+pause
 fastboot format userdata
 cls
 echo [*] PRESS ANY KEY TO REBOOT THE DEVICE
-pause > nul
+pause
 fastboot reboot
 cls
 echo.--------------------------------------------------------------------------------------------
@@ -126,7 +127,7 @@ echo.---------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] PRESS ANY KEY TO INSTALL TWRP AFTER YOU ENABLE DEVELOPER OPTIONS ON PHONE
 echo [*] OR CTRL+C TO STOP HERE
-pause > nul
+pause
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo.-----------REBOOTING_INTO_BOOTLOADER--------------------------------------------------------
@@ -141,16 +142,16 @@ echo [*]
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] PRESS ANY KEY TO FLASH RECOVERY
-pause > nul
+pause
 fastboot flash recovery pushed/recovery.img
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
 ECHO [*]
 echo [*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES
-pause > nul
+pause
 fastboot reboot
 echo [*] ON PHONE SELECT RECOVERY FROM BOOT MENU WITH VOLUME KEY THEN SELECT WITH POWER
 echo [*] PRESS ANY KEY ON PC FOR MORE NOTES
-pause > nul
+pause
 cls
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
@@ -161,5 +162,5 @@ echo [*]
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] PRESS ANY KEY TO FINISH THIS SCRIPT.
-pause > nul
+pause
 exit
