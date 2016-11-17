@@ -61,14 +61,14 @@ echo [*] COPYING FPR PARTION TO NEW DIRECTORY AS ROOT
 echo [*] CHANGING PERMISSIONS ON COPIED FRP
 adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/cp_comands.txt"
 clear
-echo [*] COPY UNLOCK.IMG OVER TOP OF COPIED FRP IN /data/local/test NOT AS ROOT WITH DIRTYCOW
+echo "[*] COPY UNLOCK.IMG OVER TOP OF COPIED FRP IN /data/local/test NOT AS ROOT WITH DIRTYCOW"
 echo [*]
 adb shell /data/local/tmp/dirtycow /data/local/test/frp /data/local/tmp/unlock
 sleep 5 > nul
 clear
 echo [*] WAITING 5 SECONDS BEFORE WRITING FRP TO EMMC
 sleep 5 > nul
-echo [*] DD COPY THE NEW (UNLOCK.IMG) FROM /data/local/test/frp TO PARTITION mmcblk0p17
+echo "[*] DD COPY THE NEW (UNLOCK.IMG) FROM /data/local/test/frp TO PARTITION mmcblk0p17"
 adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/dd_comands.txt"
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
@@ -98,17 +98,17 @@ echo [*] PRESS THE VOLUME UP/DOWN BUTTONS TO SELECT YES OR NO
 echo [*] JUST PRESS VOLUME UP TO START THE UNLOCK PROCESS.
 echo --------------------------------------------------------------------------------------------
 echo -------------------------------------------------------------------------------------------
-echo [*] PRESS ANY KEY ON COMPUTER TO START THE UNLOCK
+echo [*] PRESS ENTER ON COMPUTER TO START THE UNLOCK
 echo -n "to continue press [enter]: "
 read start
 fastboot oem unlock
 clear
-echo [*] ONCE THE BOOTLOADER IS UNLOCKED PRESS ANY KEY TO WIPE DATA
+echo [*] ONCE THE BOOTLOADER IS UNLOCKED PRESS ENTER TO WIPE DATA
 echo -n "to continue press [enter]: "
 read start
 fastboot format userdata
 clear
-echo [*] PRESS ANY KEY TO REBOOT THE DEVICE
+echo [*] PRESS ENTER TO REBOOT THE DEVICE
 echo -n "to continue press [enter]: "
 read start
 fastboot reboot
@@ -126,7 +126,7 @@ echo [*] IF PHONE DID NOT REBOOT HOLD POWER UNTILL IT POWERS OFF THEN AGAIN TO P
 echo "[*] ******************"
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
-echo [*] PRESS ANY KEY TO INSTALL TWRP AFTER YOU ENABLE DEVELOPER OPTIONS ON PHONE
+echo [*] PRESS ENTER TO INSTALL TWRP AFTER YOU ENABLE DEVELOPER OPTIONS ON PHONE
 echo [*] OR CTRL+C TO STOP HERE
 echo -n "to continue press [enter]: "
 read start
@@ -137,7 +137,7 @@ adb reboot bootloader
 clear
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
-echo [*] NOW YOUR IN FASTBOOR MODE AND READY TO FLASH TWRP RECOVERY
+echo [*] NOW YOUR IN FASTBOOT MODE AND READY TO FLASH TWRP RECOVERY
 echo [*]  
 echo [*] 
 echo [*] 
@@ -148,7 +148,7 @@ echo -n "to continue press [enter]: "
 read start
 fastboot flash recovery pushed/recovery.img
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ENTER ON PC 
-ECHO [*]
+echo [*]
 echo [*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES
 echo -n "to continue press [enter]: "
 read start
