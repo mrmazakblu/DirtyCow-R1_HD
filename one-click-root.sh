@@ -1,10 +1,11 @@
 #!/bin/sh
 
 echo --------------------------------------------------------------------------------------------
+echo THERE ARE 10 PAUSES IS THIS SCRIPT SO LOOK FOR PROMTS FOR YOU TO HIT ENTER
 echo --------------------------------------------------------------------------------------------
 echo [*] BEFORE WE BEGIN THE SCRIPT WILL RUN "ADB DEVICES" AND SEE IF YOU HAVE DRIVERS INSTLLED
 echo [*] THE NEEDED RESPONSE IS SIMILAR TO BELOW 
-echo [*]
+echo [*] 
 echo [*] List of devices attached
 echo "[*] ****************        device"
 echo [*] 
@@ -12,7 +13,7 @@ echo [*] INSTEAD OF STARS IT WILL BE YOUR SERIAL NUMBER
 echo [*] IF NO DEVICE LISTED YOU ARE NOT READY TO RUN THIS SCRIPT. CLOSE THIS WINDOW NOW IF NOT READY
 echo [*] 
 echo [*] IF DEVICE IS LISTED PRESS ANY KEY ON COMPUTER TO START
-echo [*]
+echo [*] 
 adb wait-for-device
 adb devices
 echo -n "to continue press [enter]: "
