@@ -20,7 +20,7 @@ echo [*]
 adb devices
 pause
 adb wait-for-device
-cls
+::cls
 echo [*] copying dirtycow to /data/local/tmp/dirtycow
 adb push pushed/dirtycow /data/local/tmp/dirtycow
 timeout 2 > nul
@@ -42,15 +42,16 @@ timeout 2 > nul
 echo [*] changing permissions on copied files
 adb shell chmod 0777 /data/local/tmp/*
 timeout 2 > nul
-cls
+::cls
 echo.--------------------------------------------------------------------------------------------
 echo [*] DONE PUSHING FILES TO PHONE. NOW WE ARE GOING TO TEMP WRITE OVER THE APP_PROCESS
 echo [*] WITH A MODIFIED VERSION THAT HAS lsh IN IT USING A SYSTEM-SERVER AS ROOT SHELL
 echo [*] THIS STEP WILL CAUSE PHONE TO DO A SOFT REBOOT AND WILL NOT RESPOND TO BUTTON PUSHES
 echo [*] 
+pause
 adb shell /data/local/tmp/dirtycow /system/bin/app_process32 /data/local/tmp/recowvery-app_process32
 echo.--------------------------------------------------------------------------------------------
-cls
+::cls
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*]WAITING 60 SECONDS FOR ROOT SHELL TO SPAWN
@@ -63,12 +64,13 @@ echo [*] CHANGING PERMISSIONS ON NEW DIRECTORY
 echo [*] COPYING FPR PARTION TO NEW DIRECTORY AS ROOT
 echo [*] CHANGING PERMISSIONS ON COPIED FRP
 adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/cp_comands.txt"
-cls
-echo [*] COPY UNLOCK.IMG OVER TOP OF COPIED FRP IN /data/local/test NOT AS ROOT WITH DIRTYCOW
+::cls
+echo [*] COPYING UNLOCK.IMG OVER TOP OF COPIED FRP IN /data/local/test NOT AS ROOT WITH DIRTYCOW
 echo [*]
 adb shell /data/local/tmp/dirtycow /data/local/test/frp /data/local/tmp/unlock
 timeout 5 > nul
-cls
+::cls
+pause
 echo [*] WAITING 5 SECONDS BEFORE WRITING FRP TO EMMC
 timeout 5 > nul
 echo [*] DD COPY THE NEW (UNLOCK.IMG) FROM /data/local/test/frp TO PARTITION mmcblk0p17
@@ -76,8 +78,9 @@ adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/dd_coman
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo.-----------REBOOTING_INTO_BOOTLOADER--------------------------------------------------------
+pause
 adb reboot bootloader
-cls
+::cls
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] YOUR PHONE SCREEN SHOULD BE BLACK WITH THE WORD "=>FASTBOOT mode..." IN LOWER CORNER
@@ -93,7 +96,7 @@ echo [*] IF RESPONSE IS A BLANK LINE YOU DO NOT HAVE DRIVER NEEDED TO CONTINUE. 
 echo [*] AND GET FASTBOOT DRIVERS THEN EITHER RUN "fastboot oem unlock" IN TERMINAL
 fastboot devices
 pause
-cls
+::cls
 echo [*] NOW THAT THE DEVICE IS IN FASTBOOT MODE WE ARE GOING TO UNLOCK THE
 echo [*] BOOTLOADER. ON THE NEXT SCREEN ON YOUR PHONE YOU WILL SEE 
 echo [*] PRESS THE VOLUME UP/DOWN BUTTONS TO SELECT YES OR NO
@@ -103,15 +106,15 @@ echo.---------------------------------------------------------------------------
 echo [*] PRESS ANY KEY ON COMPUTER TO START THE UNLOCK
 pause
 fastboot oem unlock
-cls
+::cls
 echo [*] ONCE THE BOOTLOADER IS UNLOCKED PRESS ANY KEY TO WIPE DATA
 pause
 fastboot format userdata
-cls
+::cls
 echo [*] PRESS ANY KEY TO REBOOT THE DEVICE
 pause
 fastboot reboot
-cls
+::cls
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] YOUR BOOTLOADER IS NOW UNLOCKED ON YOUR BLU R1 HD AMAZON DEVICE
@@ -132,7 +135,7 @@ echo.---------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo.-----------REBOOTING_INTO_BOOTLOADER--------------------------------------------------------
 adb reboot bootloader
-cls
+::cls
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] NOW YOUR IN FASTBOOR MODE AND READY TO FLASH TWRP RECOVERY
@@ -152,7 +155,7 @@ fastboot reboot
 echo [*] ON PHONE SELECT RECOVERY FROM BOOT MENU WITH VOLUME KEY THEN SELECT WITH POWER
 echo [*] PRESS ANY KEY ON PC FOR MORE NOTES
 pause
-cls
+::cls
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*] NOW YOU BOOTED TO RECOVERY CONTINUE AND MAKE A BACKUP IF YOU WANT
