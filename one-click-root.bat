@@ -138,7 +138,7 @@ adb reboot bootloader
 ::cls
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
-echo [*] NOW YOUR IN FASTBOOR MODE AND READY TO FLASH TWRP RECOVERY
+echo [*] NOW YOUR IN FASTBOOT MODE AND READY TO FLASH TWRP RECOVERY
 echo [*]  
 echo [*] 
 echo [*] 
