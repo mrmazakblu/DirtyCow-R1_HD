@@ -21,25 +21,25 @@ read start
 #clear
 echo [*] copying dirtycow to /data/local/tmp/dirtycow
 adb push pushed/dirtycow /data/local/tmp/dirtycow
-sleep 2 > nul
+sleep 10 > nul
 echo [*] copying recowvery-app_process32 to /data/local/tmp/recowvery-app_process32
 adb push pushed/recowvery-app_process32 /data/local/tmp/recowvery-app_process32
-sleep 2 > nul
+sleep 10 > nul
 echo [*] copying frp.bin to /data/local/tmp/unlock
 adb push pushed/frp.bin /data/local/tmp/unlock
-sleep 2 > nul
+sleep 10 > nul
 echo [*] copying busybox to /data/local/tmp/busybox
 adb push pushed/busybox /data/local/tmp/busybox
-sleep 2 > nul
+sleep 10 > nul
 echo [*] copying cp_comands.txt to /data/local/tmp/cp_comands.txt
 adb push pushed/cp_comands.txt /data/local/tmp/cp_comands.txt
-sleep 2 > nul
+sleep 10 > nul
 echo [*] copying dd_comands.txt to /data/local/tmp/dd_comands.txt
 adb push pushed/dd_comands.txt /data/local/tmp/dd_comands.txt
-sleep 2 > nul
+sleep 10 > nul
 echo [*] changing permissions on copied files
 adb shell chmod 0777 /data/local/tmp/*
-sleep 2 > nul
+sleep 10 > nul
 #clear
 echo --------------------------------------------------------------------------------------------
 echo [*] DONE PUSHING FILES TO PHONE. NOW WE ARE GOING TO TEMP WRITE OVER THE APP_PROCESS
