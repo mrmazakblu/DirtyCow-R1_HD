@@ -148,7 +148,7 @@ echo [*] PRESS ANY KEY TO FLASH RECOVERY
 pause
 fastboot flash recovery pushed/recovery.img
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
-ECHO [*]
+echo [*]
 echo [*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES
 pause
 fastboot reboot
