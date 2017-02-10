@@ -1,0 +1,19 @@
+order of the steps in script.
+
+1: check for device connetced in debugging mode
+2: push files to phone
+3: run the dirtycow
+4: wait for process to "spawn" a root shell environment
+5: run commands as root in that "spawned" shell
+6: run more comands modifing files copied while in the root shell
+7: enter root shell again and copy back the modified files
+8: reboot to bootloader
+9: unlock bootoader
+10: format userdata
+11: format cache
+****12: reboot back to android  *****
+13: during reboot stock recovery does factory reset
+14: turn developer mode back on and enable debugging.  This cannot be done with script, you need to do this
+15: reboot to bootloader
+16: flash custom recovery
+17: reboot straight to recovery
