@@ -177,6 +177,7 @@ GOTO main
 fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
 for /f "tokens=4" %%i in ('findstr "^(bootloader) unlock_ability" %~dp0\working\unlockability.txt') do set unlock=%%i
 echo output from find string = %unlock%
+if %unlock% gtr 1 ( 
 echo unlockable
 GOTO Continue
 ) else (
@@ -212,8 +213,21 @@ cls
 SET RETURN=Label4
 GOTO fastboot_check
 :Label4
+echo [*] DEFAULT CHOISE OF RECOVERY HAS BEEN SET TO VAMPIREFO'S 7.1
+CHOICE  /C 12 /T 10 /D 1 /M "Do You Want To Install 1=Vampirfo or 2=lopestom recovery
+IF ERRORLEVEL 2 GOTO 20
+IF ERRORLEVEL 1 GOTO 10
+
+:10
+echo you chose not to instal Vampirefo 's V7.1 built recovery 
+pause
+fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
+GOTO recovery
+:20
+echo you chose not to instal Lopestom Ported recovery 
 pause
 fastboot flash recovery pushed/recovery.img
+:recovery
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
 echo [*]
 echo [*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES
