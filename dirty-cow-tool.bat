@@ -174,18 +174,17 @@ GOTO continue_unlock
 	pause
 GOTO main
 :continue_unlock
-:: IF you are having trouble going past the unlockability checking
-:: replace "unlock_ability = 16777216" with "unlock_ability = "
 fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
-::find "unlock_ability =" "%~dp0\working\unlockability.txt"
-find "unlock_ability = 16777216" "%~dp0\working\unlockability.txt"
-if errorlevel 1 (
-    echo Not Unlockable
+for /f "tokens=4" %%i in ('findstr "^(bootloader) unlock_ability" %~dp0\working\unlockability.txt') do set unlock=%%i
+echo output from find string = %unlock%
+echo unlockable
+GOTO Continue
+) else (
+echo Not-unlockable
 echo must re-run dirty-cow
 pause
-GOTO main
-) else (
-    echo Continue)
+GOTO main)
+:Continue
 echo [*] ON YOUR PHONE YOU WILL SEE 
 echo [*] PRESS THE VOLUME UP/DOWN BUTTONS TO SELECT YES OR NO
 echo [*] JUST PRESS VOLUME UP TO START THE UNLOCK PROCESS.
