@@ -174,7 +174,10 @@ GOTO continue_unlock
 	pause
 GOTO main
 :continue_unlock
+:: IF you are having trouble going past the unlockability checking
+:: replace "unlock_ability = 16777216" with "unlock_ability = "
 fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
+::find "unlock_ability =" "%~dp0\working\unlockability.txt"
 find "unlock_ability = 16777216" "%~dp0\working\unlockability.txt"
 if errorlevel 1 (
     echo Not Unlockable
