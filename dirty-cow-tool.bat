@@ -6,7 +6,12 @@ IF EXIST "%~dp0\working" SET PATH=%PATH%;"%~dp0\working"
 Setlocal EnableDelayedExpansion
 attrib +h "pushed" >nul
 attrib +h "working" >nul
-IF NOT EXIST "pushed\*.*" GOTO error
+attrib +h "dirty-cow-log" >nul
+attrib +h "adb.exe" >nul
+attrib +h "fastboot.exe" >nul
+attrib +h "AdbWinApi.dll" >nul
+attrib +h "AdbWinUsbApi.dll" >nul
+IF NOT EXIST "pushed\*.*" GOTO error 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
 cls
@@ -34,8 +39,12 @@ echo 		][ 6.  SEE INSTRUCTIONS           ][
 echo 		][********************************][
 echo 		][ E.  EXIT                       ][
 echo 		][********************************][
+echo 		][ V.  VIEW LOG                   ][
+echo 		][********************************][
+echo 		][ C.  CLEAR LOG                  ][
+echo 		][********************************][
 echo(
-set /p env=Type your option [1,2,3,4,5,6,E] then press ENTER: || set env="0"
+set /p env=Type your option [1,2,3,4,5,6,E,V,C] then press ENTER: || set env="0"
 if /I %env%==1 goto push
 if /I %env%==2 goto dirty-cow
 if /I %env%==3 goto unlock
@@ -43,6 +52,8 @@ if /I %env%==4 goto TWRP
 if /I %env%==5 goto su
 if /I %env%==6 goto instructions
 if /I %env%==E goto end
+if /I %env%==V goto log
+if /I %env%==C goto clear
 echo(
 echo %env% is not a valid option. Please try again! 
 PING -n 3 127.0.0.1>nul
@@ -51,7 +62,7 @@ goto main
 :adb_check
 adb devices -l | find "device product:" >nul
 if errorlevel 1 (
-    echo No adb connected devices
+    echo No adb connected devices && echo %date% %time% [E] No adb device detected, check phone state, or drivers. >> "%~dp0\dirty-cow-log\log.txt"
 	pause
 	GOTO main
 ) else (
@@ -73,7 +84,7 @@ GOTO fastboot_check2
 :fastboot_check2
 	fastboot devices -l | find "fastboot" >nul
 if errorlevel 1 (
-    echo No connected devices
+    echo No connected devices && echo %date% %time% [E] No fastboot device detected. >> "%~dp0\dirty-cow-log\log.txt"
 pause
 goto main
 ) else (
@@ -114,7 +125,7 @@ adb shell ls -l /data/local/tmp > "%~dp0\working\phone_file_check.txt"
 timeout 5
 fc  "%~dp0\working\should_be\phone_file_check.txt" "%~dp0\working\phone_file_check.txt" > "%~dp0\working\phone_file_check_diff.txt"
   if errorlevel 1 (
-   echo Files Do not match Expected
+   echo Files Do not match Expected && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
 echo PRESS ANY KEY TRY TO PUSH AGAIN
 echo if continue fail this step exit window
 echo try to download files again and start over
@@ -143,7 +154,7 @@ echo.---------------------------------------------------------------------------
 echo [*] OPENING A ROOT SHELL ON THE NEWLY CREATED SYSTEM_SERVER
 echo [*] MAKING A DIRECTORY ON PHONE TO COPY FRP PARTION TO 
 echo [*] CHANGING PERMISSIONS ON NEW DIRECTORY
-echo [*] COPYING FPR PARTION TO NEW DIRECTORY AS ROOT
+echo [*] COPYING FRP PARTION TO NEW DIRECTORY AS ROOT
 echo [*] CHANGING PERMISSIONS ON COPIED FRP
 adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/cp_comands.txt"
 echo [*] COPYING UNLOCK.IMG OVER TOP OF COPIED FRP IN /data/local/test NOT AS ROOT WITH DIRTYCOW
@@ -166,7 +177,7 @@ GOTO fastboot_check
 fastboot getvar all 2> "%~dp0\working\getvar.txt"
 find "unlocked: yes" "%~dp0\working\getvar.txt"
 if errorlevel 1 (
-    echo Not Unlocked
+    echo Not Unlocked 
 GOTO continue_unlock
 ) else (
     echo Already UNLOCKED)
@@ -182,7 +193,7 @@ echo unlockable
 GOTO Continue
 ) else (
 echo Not-unlockable
-echo must re-run dirty-cow
+echo must re-run dirty-cow && echo %date% %time% [W] Checking Unlock_ability failed. >> "%~dp0\dirty-cow-log\log.txt"
 pause
 GOTO main)
 :Continue
@@ -219,12 +230,12 @@ IF ERRORLEVEL 2 GOTO 20
 IF ERRORLEVEL 1 GOTO 10
 
 :10
-echo you chose not to instal Vampirefo 's V7.1 built recovery 
+echo you chose not to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
 pause
 fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
 GOTO recovery
 :20
-echo you chose not to instal Lopestom Ported recovery 
+echo you chose not to instal Lopestom Ported recovery && echo %date% %time% [I] Lopestom's ported TWRP Recovery flashed. >> "%~dp0\dirty-cow-log\log.txt"
 pause
 fastboot flash recovery pushed/recovery.img
 :recovery
@@ -243,8 +254,22 @@ echo [*] install su from twrp code to come
 pause
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:instructions
+cls
+type "Instructions.txt"
+pause
+GOTO main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:log
+cls
+type "%~dp0\dirty-cow-log\log.txt"
+pause
+GOTO main
+:clear
+del "%~dp0\dirty-cow-log\log.txt"
+GOTO main
 :error
-echo Image File not Found!!
+echo Image File not Found!! && echo(%date% %time% [W] No files found in the pushed folder, Or pushed folder not where expected. Expected location is "%~dp0\pushed")  >> "%~dp0\dirty-cow-log\log.txt"
 echo Check that you have unzipped the 
 echo whole Tool Package
 pause
