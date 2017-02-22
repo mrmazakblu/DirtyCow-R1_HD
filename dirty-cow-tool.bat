@@ -148,7 +148,7 @@ GOTO main)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :dirty-cow
 cls
-SET RETURN=Labe2
+SET RETURN=Label2
 GOTO adb_check
 :Label2
 ::::::::::::::::::::::::::::::
@@ -159,6 +159,7 @@ echo.---------------------------------------------------------------------------
 echo [*]WAITING 60 SECONDS FOR ROOT SHELL TO SPAWN
 echo [*] WHILE APP_PROCESS IS REPLACED PHONE WILL APPEAR TO BE UNRESPONSIVE BUT SHELL IS WORKING
 timeout 60
+pause
 echo.--------------------------------------------------------------------------------------------
 echo [*] OPENING A ROOT SHELL ON THE NEWLY CREATED SYSTEM_SERVER
 echo [*] MAKING A DIRECTORY ON PHONE TO COPY FRP PARTION TO 
@@ -176,6 +177,7 @@ echo [*] DD COPY THE NEW (UNLOCK.IMG) FROM /data/local/test/frp TO PARTITION mmc
 adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/dd_comands.txt"
 echo Look at command window for errors before continuing
 pause 
+adb reboot
 GOTO main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :unlock
@@ -257,7 +259,7 @@ IF ERRORLEVEL 2 GOTO 20
 IF ERRORLEVEL 1 GOTO 10
 
 :10
-echo you chose not to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
+echo you chose to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
 pause
 fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
 GOTO recovery
