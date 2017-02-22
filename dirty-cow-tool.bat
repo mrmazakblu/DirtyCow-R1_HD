@@ -123,6 +123,9 @@ timeout 3
 echo [*] checking contents of phone folder
 adb shell ls -l /data/local/tmp > "%~dp0\working\phone_file_check.txt" 
 timeout 5
+::::::::::::::::::::::::::::::::::::::::
+::error checking    checks the contents of the tmp folder and compairs it to a sample of what it should be
+::::::::::::::::::::::::::::::::::::::::
 fc  "%~dp0\working\should_be\phone_file_check.txt" "%~dp0\working\phone_file_check.txt" > "%~dp0\working\phone_file_check_diff.txt"
   if errorlevel 1 (
    echo Files Do not match Expected && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
@@ -130,11 +133,17 @@ echo PRESS ANY KEY TRY TO PUSH AGAIN
 echo if continue fail this step exit window
 echo try to download files again and start over
 pause
+::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::Goes back to begining of the push section to try again if fails check
+::::::::::::::::::::::::::::::::::::::::::::
 GOTO Label1
 ) else (
 echo       File compair matches
 echo       Safe to continue to run Dirty-cow
 pause
+::::::::::::::::::::::::
+::goes back to "tool" main display
+:::::::::::::::::::::::::::::::
 GOTO main)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :dirty-cow
@@ -174,6 +183,9 @@ cls
 SET RETURN=Label3
 GOTO fastboot_check
 :Label3
+:::::::::::::::::::::::::::::::::::
+::checking the getvar output to verify if phone is unlocked aready
+:::::::::::::::::::::::::::::::::::::
 fastboot getvar all 2> "%~dp0\working\getvar.txt"
 find "unlocked: yes" "%~dp0\working\getvar.txt"
 if errorlevel 1 (
@@ -181,10 +193,13 @@ if errorlevel 1 (
 GOTO continue_unlock
 ) else (
     echo Already UNLOCKED)
-	echo continue to TWRP you are alread unlocked
+	echo continue to TWRP option, you are alread unlocked
 	pause
 GOTO main
 :continue_unlock
+:::::::::::::::::::::::::::::::::::
+::checking the get_unlock_ability output string to verify it is greater than "0" because "0" is unlockable
+::::::::::::::::::::::::::::::::::::
 fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
 for /f "tokens=4" %%i in ('findstr "^(bootloader) unlock_ability" %~dp0\working\unlockability.txt') do set unlock=%%i
 echo output from find string = %unlock%
@@ -224,8 +239,20 @@ cls
 SET RETURN=Label4
 GOTO fastboot_check
 :Label4
+:::::::::::::::::::::::::::::::::::
+::checking the getvar output to verify if phone is unlocked aready
+:::::::::::::::::::::::::::::::::::::
+fastboot getvar all 2> "%~dp0\working\getvar.txt"
+find "unlocked: yes" "%~dp0\working\getvar.txt"
+if errorlevel 1 (
+    echo Not Unlocked 
+	echo returning to unlocksection, then phone will wipe and tool will return to main window
+	GOTO continue_unlock
+) else (
+    echo Already UNLOCKED)
+	echo continue to TWRP option, you are alread unlocked
 echo [*] DEFAULT CHOISE OF RECOVERY HAS BEEN SET TO VAMPIREFO'S 7.1
-CHOICE  /C 12 /T 10 /D 1 /M "Do You Want To Install 1=Vampirfo or 2=lopestom recovery
+CHOICE  /C 12 /T 10 /D 1 /M "Do You Want To Install 1=Vampirfo or 2=lopestom recovery"
 IF ERRORLEVEL 2 GOTO 20
 IF ERRORLEVEL 1 GOTO 10
 
