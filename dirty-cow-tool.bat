@@ -130,27 +130,8 @@ adb shell /data/local/tmp/busybox md5sum /data/local/tmp/cp_comands.txt >> "%~dp
 adb shell /data/local/tmp/busybox md5sum /data/local/tmp/busybox >> "%~dp0\working\phone_file_md5.txt"
 timeout 5
 ::::::::::::::::::::::::::::::::::::::::
-::error checking    checks the contents of the tmp folder and compairs it to a sample of what it should be
+::error checking    checks the contents of the tmp folder and compairs MD5 of what it should be
 ::::::::::::::::::::::::::::::::::::::::
-::fc  "%~dp0\working\should_be\phone_file_check.txt" "%~dp0\working\phone_file_check.txt" > "%~dp0\working\phone_file_check_diff.txt"
-::  if errorlevel 1 (
-::   echo Files Do not match Expected && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
-::echo PRESS ANY KEY TRY TO PUSH AGAIN
-::echo if continue fail this step exit window
-::echo try to download files again and start over
-::pause
-::::::::::::::::::::::::::::::::::::::::::::
-:::::::::::::Goes back to begining of the push section to try again if fails check
-::::::::::::::::::::::::::::::::::::::::::::
-::GOTO Label1
-::) else (
-::echo       File compair matches
-::echo       Safe to continue to run Dirty-cow
-::pause
-::::::::::::::::::::::::
-::goes back to "tool" main display
-:::::::::::::::::::::::::::::::
-::GOTO main)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 find "b5eec83df6dd57902a857f6c542e793e  /data/local/tmp/busybox" "%~dp0\working\phone_file_md5.txt"
 if errorlevel 1 (
@@ -203,7 +184,7 @@ if errorlevel 1 (
 echo       File compair matches
 echo       Safe to continue to run Dirty-cow
 pause
-GOTO main)
+GOTO main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :dirty-cow
 cls
