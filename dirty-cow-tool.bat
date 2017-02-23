@@ -122,28 +122,87 @@ adb shell chmod 0777 /data/local/tmp/*
 timeout 3
 echo [*] checking contents of phone folder
 adb shell ls -l /data/local/tmp > "%~dp0\working\phone_file_check.txt" 
+adb shell /data/local/tmp/busybox md5sum /data/local/tmp/unlock > "%~dp0\working\phone_file_md5.txt"
+adb shell /data/local/tmp/busybox md5sum /data/local/tmp/recowvery-app_process32 >> "%~dp0\working\phone_file_md5.txt"
+adb shell /data/local/tmp/busybox md5sum /data/local/tmp/dirtycow >> "%~dp0\working\phone_file_md5.txt"
+adb shell /data/local/tmp/busybox md5sum /data/local/tmp/dd_comands.txt >> "%~dp0\working\phone_file_md5.txt"
+adb shell /data/local/tmp/busybox md5sum /data/local/tmp/cp_comands.txt >> "%~dp0\working\phone_file_md5.txt"
+adb shell /data/local/tmp/busybox md5sum /data/local/tmp/busybox >> "%~dp0\working\phone_file_md5.txt"
 timeout 5
 ::::::::::::::::::::::::::::::::::::::::
 ::error checking    checks the contents of the tmp folder and compairs it to a sample of what it should be
 ::::::::::::::::::::::::::::::::::::::::
-fc  "%~dp0\working\should_be\phone_file_check.txt" "%~dp0\working\phone_file_check.txt" > "%~dp0\working\phone_file_check_diff.txt"
-  if errorlevel 1 (
-   echo Files Do not match Expected && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
-echo PRESS ANY KEY TRY TO PUSH AGAIN
-echo if continue fail this step exit window
-echo try to download files again and start over
-pause
+::fc  "%~dp0\working\should_be\phone_file_check.txt" "%~dp0\working\phone_file_check.txt" > "%~dp0\working\phone_file_check_diff.txt"
+::  if errorlevel 1 (
+::   echo Files Do not match Expected && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
+::echo PRESS ANY KEY TRY TO PUSH AGAIN
+::echo if continue fail this step exit window
+::echo try to download files again and start over
+::pause
 ::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::Goes back to begining of the push section to try again if fails check
 ::::::::::::::::::::::::::::::::::::::::::::
-GOTO Label1
-) else (
-echo       File compair matches
-echo       Safe to continue to run Dirty-cow
-pause
+::GOTO Label1
+::) else (
+::echo       File compair matches
+::echo       Safe to continue to run Dirty-cow
+::pause
 ::::::::::::::::::::::::
 ::goes back to "tool" main display
 :::::::::::::::::::::::::::::::
+::GOTO main)
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+find "b5eec83df6dd57902a857f6c542e793e  /data/local/tmp/busybox" "%~dp0\working\phone_file_md5.txt"
+if errorlevel 1 (
+    echo busybox file does not match 
+	echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
+	pause
+	GOTO main
+) else (
+    echo busybox matches md5)
+find "df5cf88006478ad421028c58df5a55ad  /data/local/tmp/cp_comands.txt" "%~dp0\working\phone_file_md5.txt"
+if errorlevel 1 (
+    echo cp_comands.txt file does not match 
+	echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
+	pause
+	GOTO main
+) else (
+    echo cp_comands.txt matches md5)
+find "28443a967a9b39215b5102573ef1731b  /data/local/tmp/dd_comands.txt" "%~dp0\working\phone_file_md5.txt"
+if errorlevel 1 (
+    echo dd_comands.txt file does not match 
+	echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
+	pause
+	GOTO main
+) else (
+    echo dd_comands.txt matches md5)
+find "8259b595dbfa9cea131bd798ad4ef323  /data/local/tmp/dirtycow" "%~dp0\working\phone_file_md5.txt"
+if errorlevel 1 (
+    echo dirtycow file does not match 
+	echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
+	pause
+	GOTO main
+) else (
+    echo dirtycow matches md5)
+find "d201fb59330cc11343452479757f6c40  /data/local/tmp/recowvery-app_process32" "%~dp0\working\phone_file_md5.txt"
+if errorlevel 1 (
+    echo recowvery-app_process32 file does not match 
+	echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
+	pause
+	GOTO main
+) else (
+    echo recowvery-app_process32 matches md5)
+find "18ab1955384691a35b127a3eebd6ef72  /data/local/tmp/unlock" "%~dp0\working\phone_file_md5.txt"
+if errorlevel 1 (
+    echo unlock file does not match 
+	echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
+	pause
+	GOTO main
+) else (
+    echo unlock matches md5)
+echo       File compair matches
+echo       Safe to continue to run Dirty-cow
+pause
 GOTO main)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :dirty-cow
@@ -171,11 +230,21 @@ echo [*] COPYING UNLOCK.IMG OVER TOP OF COPIED FRP IN /data/local/test NOT AS RO
 echo [*]
 adb shell /data/local/tmp/dirtycow /data/local/test/frp /data/local/tmp/unlock
 timeout 5
+echo checking md5 of new frp before copying to mmcblk0p17
+adb shell /data/local/tmp/busybox md5sum /data/local/test/frp > "%~dp0\working\new_frp_md5.txt"
+find "18ab1955384691a35b127a3eebd6ef72  /data/local/test/frp" "%~dp0\working\new_frp_md5.txt"
+if errorlevel 1 (
+    echo new_frp_md5 does not match 
+	echo Something Went Wrong Restarting phone and try again && echo %date% %time% [W] Final stage of dirty-cow has failed md5 error checking. >> "%~dp0\dirty-cow-log\log.txt"
+	pause
+	adb reboot
+	GOTO main
+) else (
+    echo new_frp matches md5)
 echo [*] WAITING 5 SECONDS BEFORE WRITING FRP TO EMMC
 timeout 5
 echo [*] DD COPY THE NEW (UNLOCK.IMG) FROM /data/local/test/frp TO PARTITION mmcblk0p17
 adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/dd_comands.txt"
-echo Look at command window for errors before continuing
 pause 
 adb reboot
 GOTO main
