@@ -339,6 +339,17 @@ GOTO main
 :log
 cls
 type "%~dp0\dirty-cow-log\log.txt"
+CHOICE  /C YN  /M "Do You Want To Copy Log to Clipboard to share issue with forum"
+IF ERRORLEVEL 2 GOTO 20
+IF ERRORLEVEL 1 GOTO 10
+
+:10
+echo log is now in clipboard You can right click and paste it to anywhere (Like in forrum post)
+type "%~dp0\dirty-cow-log\log.txt" | clip
+pause
+goto main
+:20
+echo log not copied
 pause
 GOTO main
 :clear
