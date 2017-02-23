@@ -33,7 +33,7 @@ echo 		][ 3. Do Bootloader Unlock        ][
 echo 		][********************************][
 echo 		][ 4.  Flash TWRP                 ][
 echo 		][********************************][
-echo 		][ 5.  Extra SU?                  ][
+echo 		][ 5.  Extra Menu                 ][
 echo 		][********************************][
 echo 		][ 6.  SEE INSTRUCTIONS           ][
 echo 		][********************************][
@@ -49,7 +49,7 @@ if /I %env%==1 goto push
 if /I %env%==2 goto dirty-cow
 if /I %env%==3 goto unlock
 if /I %env%==4 goto TWRP
-if /I %env%==5 goto su
+if /I %env%==5 goto second
 if /I %env%==6 goto instructions
 if /I %env%==E goto end
 if /I %env%==V goto log
@@ -347,6 +347,159 @@ GOTO main
 :clear
 del "%~dp0\dirty-cow-log\log.txt"
 GOTO main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:second
+cls
+echo( 
+echo 	***************************************************
+echo 	*                                                 *
+echo 	*      R1-HD Bootloader Unlock Tool               *
+echo 	*                                                 *
+echo 	***************************************************
+echo(
+echo 		 Choose what you need to work on.
+echo(
+echo 		][********************************][
+echo 		][ 1.      Flash SuperSu          ][
+echo 		][********************************][
+echo 		][ 2. AMZ Full Debloat script v2  ][
+echo 		][********************************][
+echo 		][ 3. AMZ Part Debloat script v2  ][
+echo 		][********************************][
+echo 		][ 4.     Google Debloat v2       ][
+echo 		][********************************][
+echo 		][ 5.    MTK_BLU Debloat v2       ][
+echo 		][********************************][
+echo 		][ 6.       UNDO DE-BLOAT         ][
+echo 		][********************************][
+echo 		][ 7.       Add FM Radio          ][
+echo 		][********************************][
+echo 		][ 8.    ROLL Back Preloader      ][
+echo 		][********************************][
+echo 		][ R.      Return to Main         ][
+echo 		][********************************][
+echo(
+set /p env=Type your option [1,2,3,4,5,6,7,8,R] then press ENTER: || set env="0"
+if /I %env%==1 goto SuperSU
+if /I %env%==2 goto debloatfull
+if /I %env%==3 goto debloatpart
+if /I %env%==4 goto debloatgoogle
+if /I %env%==5 goto debloatmtkblu
+if /I %env%==6 goto re-bloat
+if /I %env%==7 goto radio
+if /I %env%==8 goto preloader
+if /I %env%==R goto main
+echo(
+echo %env% is not a valid option. Please try again! 
+PING -n 3 127.0.0.1>nul
+goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:SuperSU
+cls
+SET RETURN=Label5
+GOTO adb_check
+:Label5
+adb reboot recovery
+adb wait-for-device
+adb push pushed/UPDATE-SuperSU-v2.76-20160630161323.zip /sdcard/Download
+adb shell "cd /sbin;recovery - update_package=/sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip"
+pause
+goto main
+:debloatfull
+cls
+SET RETURN=Label6
+GOTO adb_check
+:Label6
+adb reboot recovery
+adb wait-for-device
+adb push pushed/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip /sdcard/Download
+adb shell "cd /sbin;recovery - update_package=/sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip"
+echo debloat scripts curtesy of emc2cube
+pause
+goto main
+:debloatpart
+cls
+SET RETURN=Label7
+GOTO adb_check
+:Label7
+adb reboot recovery
+adb wait-for-device
+adb push pushed/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip /sdcard/Download
+adb shell "cd /sbin;recovery - update_package=/sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip"
+echo debloat scripts curtesy of emc2cube
+pause
+goto main
+:debloatgoogle
+cls
+SET RETURN=Label8
+GOTO adb_check
+:Label8
+adb reboot recovery
+adb wait-for-device
+adb push pushed/bluR1-GOOGLE-debloat_v2.zip /sdcard/Download
+adb shell "cd /sbin;recovery - update_package=/sdcard/Download/bluR1-GOOGLE-debloat_v2.zip"
+echo debloat scripts curtesy of emc2cube
+pause
+goto main
+:debloatmtkblu
+cls
+SET RETURN=Label9
+GOTO adb_check
+:Label9
+adb reboot recovery
+adb wait-for-device
+adb push pushed/bluR1-MTK_BLU-debloat_v2.zip /sdcard/Download
+adb shell "cd /sbin;recovery - update_package=/sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
+echo debloat scripts curtesy of emc2cube
+pause
+goto main
+:re-bloat
+cls
+SET RETURN=Label10
+GOTO adb_check
+:Label10
+adb reboot recovery
+adb wait-for-device
+adb push pushed/bluR1-RestoreApps-OTA.zip /sdcard/Download
+adb shell "cd /sbin;recovery - update_package=/sdcard/Download/bluR1-RestoreApps-OTA.zip"
+echo coming soon
+pause
+goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:radio
+cls
+SET RETURN=Label11
+GOTO adb_check
+:Label11
+adb reboot recovery
+adb wait-for-device
+adb push pushed/fm_Radio_WITHOUT_boot.zip /sdcard/Download
+adb shell "cd /sbin;recovery - update_package=/sdcard/Download/fm_Radio_WITHOUT_boot.zip"
+echo Also need to install A program called selinux mode changer
+echo It is available from Either xda thread
+echo https://forum.xda-developers.com/devdb/project/dl/?id=12506
+echo  or also from F-Droid
+pause
+goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
+:preloader
+cls
+SET RETURN=Label9
+GOTO adb_check
+:Label9
+adb reboot recovery
+adb wait-for-device
+adb push pushed/after_bootloader_roll_back_5.zip /sdcard/Download
+adb shell "cd /sbin;recovery - update_package=/sdcard/Download/after_bootloader_roll_back_5.zip"
+echo It is likely that at this point phone is Boot-looping 
+echo At this point if looping Hold volume up during the boot-looping
+echo you should be at the boot select menu now
+echo Use volume keys to choose fastboot, then power button to enter
+echo BOOTLOADER WILL NOW BE MADE "SECURE = NO" BY REDOING OEM UNLOCK
+echo(
+pause
+goto continue_unlock
 :error
 echo Image File not Found!! && echo(%date% %time% [W] No files found in the pushed folder, Or pushed folder not where expected. Expected location is "%~dp0\pushed")  >> "%~dp0\dirty-cow-log\log.txt"
 echo Check that you have unzipped the 
