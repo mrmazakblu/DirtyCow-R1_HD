@@ -69,7 +69,7 @@ if errorlevel 1 (
     echo Found ADB!)
 :: (emulated "Return")
 GOTO %RETURN%	
-::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :fastboot_check
 adb devices -l | find "device product:" >nul
 if errorlevel 1 (
@@ -80,7 +80,7 @@ GOTO fastboot_check2
 	adb reboot bootloader
 	timeout 10)
 GOTO fastboot_check2
-::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :fastboot_check2
 	fastboot devices -l | find "fastboot" >nul
 if errorlevel 1 (
@@ -129,6 +129,7 @@ adb shell /data/local/tmp/busybox md5sum /data/local/tmp/dd_comands.txt >> "%~dp
 adb shell /data/local/tmp/busybox md5sum /data/local/tmp/cp_comands.txt >> "%~dp0\working\phone_file_md5.txt"
 adb shell /data/local/tmp/busybox md5sum /data/local/tmp/busybox >> "%~dp0\working\phone_file_md5.txt"
 timeout 5
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::
 ::error checking    checks the contents of the tmp folder and compairs MD5 of what it should be
 ::::::::::::::::::::::::::::::::::::::::
@@ -226,6 +227,7 @@ echo [*] WAITING 5 SECONDS BEFORE WRITING FRP TO EMMC
 timeout 5
 echo [*] DD COPY THE NEW (UNLOCK.IMG) FROM /data/local/test/frp TO PARTITION mmcblk0p17
 adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/dd_comands.txt"
+echo coping new frp is done phone now, will reboot and script will return to start screen
 pause 
 adb reboot
 GOTO main
@@ -389,6 +391,7 @@ echo(
 echo %env% is not a valid option. Please try again! 
 PING -n 3 127.0.0.1>nul
 goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :SuperSU
 cls
@@ -401,6 +404,8 @@ adb push pushed/UPDATE-SuperSU-v2.76-20160630161323.zip /sdcard/Download
 adb shell "/sbin;recovery -- update_package=/sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip"
 pause
 goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :debloatfull
 cls
 SET RETURN=Label6
@@ -413,6 +418,8 @@ adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-AMZ-FULLdeblo
 echo debloat scripts curtesy of emc2cube
 pause
 goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :debloatpart
 cls
 SET RETURN=Label7
@@ -425,6 +432,8 @@ adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-AMZ-PARTIALde
 echo debloat scripts curtesy of emc2cube
 pause
 goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :debloatgoogle
 cls
 SET RETURN=Label8
@@ -437,6 +446,8 @@ adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-GOOGLE-debloa
 echo debloat scripts curtesy of emc2cube
 pause
 goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :debloatmtkblu
 cls
 SET RETURN=Label9
@@ -449,6 +460,8 @@ adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-MTK_BLU-deblo
 echo debloat scripts curtesy of emc2cube
 pause
 goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :re-bloat
 cls
 SET RETURN=Label10
@@ -461,7 +474,8 @@ adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-RestoreApps-O
 echo coming soon
 pause
 goto main
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :radio
 cls
 SET RETURN=Label11
@@ -477,7 +491,8 @@ echo https://forum.xda-developers.com/devdb/project/dl/?id=12506
 echo  or also from F-Droid
 pause
 goto main
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :preloader
 cls
 SET RETURN=Label9
@@ -495,30 +510,39 @@ echo BOOTLOADER WILL NOW BE MADE "SECURE = NO" BY REDOING OEM UNLOCK
 echo(
 pause
 goto continue_unlock
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :error
 echo Image File not Found!! && echo(%date% %time% [W] No files found in the pushed folder, Or pushed folder not where expected. Expected location is "%~dp0\pushed")  >> "%~dp0\dirty-cow-log\log.txt"
 echo Check that you have unzipped the 
 echo whole Tool Package
 pause
 goto end
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :error1
 echo Boot.img not Found!!
 echo Check that you have unzipped the 
 echo whole Tool Package
 pause
 goto end
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :error2
 echo Recovery.img not Found!!
 echo Check that you have unzipped the 
 echo whole Tool Package
 pause
 goto end
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :error3
 echo File not Found!!
 echo Check that you have unzipped the 
 echo whole Tool Package
 pause
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :end
 echo(
 del "%~dp0\working\*.txt"
