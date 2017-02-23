@@ -1,6 +1,0 @@
--rwxrwxrwx shell    shell     1194144 2016-11-02 15:42 busybox
--rwxrwxrwx shell    shell         448 2016-11-15 14:10 cp_comands.txt
--rwxrwxrwx shell    shell         130 2016-11-15 14:11 dd_comands.txt
--rwxrwxrwx shell    shell       13784 2016-11-09 19:16 dirtycow
--rwxrwxrwx shell    shell       18068 2016-11-15 13:29 recowvery-app_process32
--rwxrwxrwx shell    shell     1048576 2016-10-30 10:31 unlock
