@@ -1,0 +1,4 @@
+//
+// File Checksum Integrity Verifier version 2.05.
+//
+3ddb42f18d770940c79ca721b817cb6f c:\users\mr\documents\github\dirtycow-r1_hd\dirtycow-r1_hd-tool-v4.zip
