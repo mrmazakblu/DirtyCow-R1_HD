@@ -1,8 +1,11 @@
 #!/bin/bash
 clear
 chmod a+x R1-HD-TOOL.sh
-function foo { echo start function; ( echo start subshell; return; echo end subshell); echo end function; }
-
+adddate() {
+    while IFS= read -r line; do
+        echo "$(date) $line"
+    done
+}
 echo   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 echo   "          ____  _       _   _ ____     _____ ___   ___  _                 "
 echo   "         |  _ \/ |     | | | |  _ \   |_   _/ _ \ / _ \| |                "
@@ -59,7 +62,8 @@ select opt in "${options[@]}"
 					echo busybox matches md5
 				else
 					echo busybox file doesnot match 
-					echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] busybox File pushed to phone do not match md5. >> "log.txt"
+					echo need to push files again maybe need to download zip file again too
+					echo "[W] busybox File pushed to phone do not match md5" | adddate >> "log.txt"
 					echo "press enter to exit"
 						read \n
 					bash R1-HD-TOOL.sh
@@ -69,7 +73,8 @@ select opt in "${options[@]}"
 					echo cp_comands.txt matches md5
 				else
 					echo cp_comands.txt file does not match 
-					echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] cp_comands.txt File pushed to phone do not match md5. >> "log.txt"
+					echo need to push files again maybe need to download zip file again too
+					echo "[W] cp_comands.txt File pushed to phone do not match md5" | adddate  >> "log.txt"
 					echo "press enter to exit"
 						read \n
 					bash R1-HD-TOOL.sh
@@ -79,7 +84,8 @@ select opt in "${options[@]}"
 					echo dd_comands.txt matches md5
 				else
 					echo dd_comands.txt file does not match 
-					echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] dd_comands.txt File pushed to phone do not match md5. >> "log.txt"
+					echo need to push files again maybe need to download zip file again too
+					echo "[W] dd_comands.txt File pushed to phone do not match md5" | adddate >> "log.txt"
 					echo "press enter to exit"
 						read \n
 					bash R1-HD-TOOL.sh
@@ -89,7 +95,8 @@ select opt in "${options[@]}"
 					echo dirtycow matches md5
 				else
 					echo dirtycow file does not match 
-					echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] dirtycow Files pushed to phone do not match md5. >> "log.txt"
+					echo need to push files again maybe need to download zip file again too
+					echo "[W] dirtycow Files pushed to phone do not match md5" | adddate  >> "log.txt"
 					echo "press enter to exit"
 						read \n
 					bash R1-HD-TOOL.sh
@@ -99,7 +106,8 @@ select opt in "${options[@]}"
 					echo recowvery-app_process32 matches md5
 				else
 					echo recowvery-app_process32 file does not match 
-					echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] recowvery-app_process32 pushed to phone do not match md5. >> "log.txt"
+					echo need to push files again maybe need to download zip file again too
+					echo "[W] recowvery-app_process32 pushed to phone do not match md5" | adddate  >> "log.txt"
 					echo "press enter to exit"
 						read \n
 					bash R1-HD-TOOL.sh
@@ -109,7 +117,8 @@ select opt in "${options[@]}"
 					echo unlock matches md5
 				else
 					echo unlock file does not match 
-					echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] unlock File pushed to phone do not match md5. >> "log.txt"
+					echo need to push files again maybe need to download zip file again too 
+					echo "[W] unlock File pushed to phone do not match md5" | adddate  >> "log.txt"
 					echo "press enter to exit"
 						read \n
 					bash R1-HD-TOOL.sh
@@ -127,6 +136,7 @@ select opt in "${options[@]}"
 				echo "--------------------------------------------------------------------------------"
 				adb shell /data/local/tmp/dirtycow /system/bin/app_process32 /data/local/tmp/recowvery-app_process32
 				echo --------------------------------------------------------------------------------------------
+				echo "Dirty-cow started" | adddate >> log.txt
 				echo --------------------------------------------------------------------------------------------
 				echo --------------------------------------------------------------------------------------------
 				echo [*]WAITING 60 SECONDS FOR ROOT SHELL TO SPAWN
@@ -150,7 +160,8 @@ select opt in "${options[@]}"
 					echo new FRP matches md5
 				else
 					echo unlock file does not match 
-					echo Something Went Wrong Restarting phone and try again && echo %date% %time% [W] New FRP final stage in dirty-cow does not match md5. >> "log.txt"
+					echo Something Went Wrong Restarting phone and try again 
+					echo "[W] New FRP final stage in dirty-cow does not match md5" | adddate >> "log.txt"
 					echo "press enter to exit"
 					read \n
 					adb reboot
@@ -184,17 +195,21 @@ select opt in "${options[@]}"
 					echo "Not Unlocked Yet"
 				fi
 				fastboot flashing get_unlock_ability 2> "working/unlockability.txt"
-				if grep -q "(bootloader) unlock_ability" "working/unlockability.txt"; then
-					echo "Unlockability shows phone is unlockable"
-					echo "This function is not working correct yet it is set to allways pass"
+				sed -i '3,4d' working/unlockability.txt
+				sed -i '1d' working/unlockability.txt
+				sed -i 's/[^0-9]//g' working/unlockability.txt
+				value=$(cat working/unlockability.txt)
+				if [ "$value" -gt "99" ]; then 
+				    echo "Unlockability shows phone is unlockable"
+					echo "continueing"
 				else
-					echo "Not Unlockable Yet Rebooting now and try again"
-					echo "This function is not working correct yet it is set to allways pass"
-					#echo "press enter to exit"
-					#read \n
-					#adb reboot
-					#bash R1-HD-TOOL.sh
-					#exit
+					echo "phone shows that it is not unlockable yet"
+					echo "press enter to exit"
+					echo "Phone Failed unlockability check"  | adddate >> log.txt
+					read \n
+					adb reboot
+					bash R1-HD-TOOL.sh
+					exit
 				fi
 				echo "[*] ON YOUR PHONE YOU WILL SEE"
 				echo "[*] PRESS THE VOLUME UP/DOWN BUTTONS TO SELECT YES OR NO"
@@ -210,6 +225,7 @@ select opt in "${options[@]}"
 				fastboot format cache
 				sleep 5
 				fastboot reboot
+				echo "OEM UNLOCK HAS BEEN RUN and userdata formated" | adddate >> log.txt
 				echo "[*]         IF PHONE DID NOT REBOOT ON ITS OWN" 
 				echo "[*]         HOLD POWER BUTTON UNTILL IT TURNS OFF"
 				echo "[*]         THEN TURN IT BACK ON"
@@ -230,7 +246,8 @@ select opt in "${options[@]}"
 				else
 					echo "Not Unlocked Yet"
 					echo "press enter to exit"
-					read \n
+					echo "Recovery attempted to install when bootloader shows locked" | adddate >> log.txt
+					echo read \n
 					adb reboot
 					bash R1-HD-TOOL.sh
 					exit
@@ -245,7 +262,7 @@ select opt in "${options[@]}"
 									"vampirefo 1")
 										echo "--------------------------------------------------------------------------------"
 										echo "you chose to instal Vampirefo-s V7.1 built recovery" 
-										echo "%date% %time% [I] Vamirefo-s v7.1 TWRP Recovery flashed" >> log.txt
+										echo "[I] Vamirefo-s v7.1 TWRP Recovery flashed" | adddate >> log.txt
 										fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
 										echo "[*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC" 
 										echo "[*]"
@@ -260,7 +277,7 @@ select opt in "${options[@]}"
 									"lopestom 2")
 										echo "--------------------------------------------------------------------------------"
 										echo "you chose to instal Lopestom original ported twrp"
-										echo "%date% %time% [I] Lopestom TWRP Recovery flashed" >> log.txt
+										echo "[I] Lopestom TWRP Recovery flashed" | adddate >> log.txt
 										fastboot flash recovery pushed/recovery.img
 										echo "[*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC" 
 										echo "[*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES"
@@ -286,18 +303,26 @@ select opt in "${options[@]}"
 				exit
 			;;
 			"SEE INSTRUCTIONS 6")
-				echo "--------------------------------------------------------------------------------"
+				echo "--Instructions Have not been written yet----------------------------"
 				bash R1-HD-TOOL.sh
 				exit
 				;;
 			"EXIT 7")
+				rm -f working/*.txt
 				exit
 			;;
 			"VIEW LOG 8")
+				clear
+				cat log.txt
+				echo "[*] press enter to continue"
+					read \n
 				bash R1-HD-TOOL.sh
 				exit
 			;;
 			"CLEAR LOG 9")
+				rm -f log.txt
+				echo "[*] press enter to continue"
+					read \n
 				bash R1-HD-TOOL.sh
 				exit
 			;;
