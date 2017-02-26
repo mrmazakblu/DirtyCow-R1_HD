@@ -506,9 +506,9 @@ goto main
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :preloader
 cls
-SET RETURN=Label9
+SET RETURN=Label12
 GOTO adb_check
-:Label9
+:Label12
 adb reboot recovery
 adb wait-for-device
 adb push pushed/after_bootloader_roll_back_5.zip /sdcard/Download
