@@ -6,6 +6,47 @@ adddate() {
         echo "$(date) $line"
     done
 }
+adb_check() {
+adb devices -l > working/adb_devices.txt
+sleep 5
+if grep -q "product:" "working/adb_devices.txt"; then
+	echo adb device found
+	return
+else
+	echo no detected devices
+	echo "No Adb devices found " | adddate  >> "log.txt"
+	echo "trying to return from fastboot"
+	fast_check
+	fastboot reboot
+	echo "sleeping some time to allow for reboot time"
+	sleep 30
+	adb_check
+	return
+fi
+}
+fast_check() {
+adb devices -l > working/adb_devices.txt
+sleep 5
+if grep -q "product:" "working/adb_devices.txt"; then
+	echo adb device found
+	adb reboot bootloader
+	echo sleeping 10 seconds
+	sleep 20
+fi
+fastboot devices -l > working/fast_devices.txt
+sleep 5
+if grep -q "fastboot" "working/fast_devices.txt"; then
+	echo fastboot detected
+	return
+else
+	echo "No Fastboot devices found " | adddate  >> "log.txt"
+	echo "No Fastboot devices found "
+	echo "press enter to exit"
+	read \n
+	bash R1-HD-TOOL.sh
+	exit
+fi
+}
 echo   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 echo   "          ____  _       _   _ ____     _____ ___   ___  _                 "
 echo   "         |  _ \/ |     | | | |  _ \   |_   _/ _ \ / _ \| |                "
@@ -22,6 +63,7 @@ select opt in "${options[@]}"
 	do
 		case $opt in
 			"Push Files for Dirtycow 1")
+				adb_check
 				echo "-----Copying files To Phone needed to do do the dirty-cow-----------------------"
 				echo "--------------------------------------------------------------------------------"
 				echo "press enter to continue"
@@ -133,6 +175,7 @@ select opt in "${options[@]}"
 				exit
 			;;
 			"Run the Dirty-cow Part 2")
+				adb_check
 				echo "--------------------------------------------------------------------------------"
 				adb shell /data/local/tmp/dirtycow /system/bin/app_process32 /data/local/tmp/recowvery-app_process32
 				echo --------------------------------------------------------------------------------------------
@@ -182,7 +225,7 @@ select opt in "${options[@]}"
 			;;
 			"Do Bootloader Unlock 3")
 				echo "--------------------------------------------------------------------------------"
-				adb reboot bootloader
+				fast_check
 				fastboot getvar all 2> "working/getvar.txt"
 				if grep -q "unlocked: yes" "working/getvar.txt"; then
 					echo "Already Unlocked Going Back to Menu"
@@ -207,7 +250,7 @@ select opt in "${options[@]}"
 					echo "press enter to exit"
 					echo "Phone Failed unlockability check"  | adddate >> log.txt
 					read \n
-					adb reboot
+					fastboot reboot
 					bash R1-HD-TOOL.sh
 					exit
 				fi
@@ -234,12 +277,11 @@ select opt in "${options[@]}"
 				echo "[*]         DOING A FACTORY RESET"
 				echo "[*] press enter to exit"
 					read \n
-				sudo $ADB kill-server
 				bash R1-HD-TOOL.sh
 				exit
 			;;
 			"Flash TWRP 4")
-				adb reboot bootloader
+				fast_check
 				fastboot getvar all 2> "working/getvar.txt"
 				if grep -q "unlocked: yes" "working/getvar.txt"; then
 					echo "Already Unlocked Going to continue"
@@ -248,7 +290,7 @@ select opt in "${options[@]}"
 					echo "press enter to exit"
 					echo "Recovery attempted to install when bootloader shows locked" | adddate >> log.txt
 					echo read \n
-					adb reboot
+					fastboot reboot
 					bash R1-HD-TOOL.sh
 					exit
 				fi
@@ -321,7 +363,8 @@ select opt in "${options[@]}"
 			;;
 			"CLEAR LOG 9")
 				rm -f log.txt
-				echo "[*] press enter to continue"
+				echo "[*] press enter to confirm Delete logs and continue"
+				echo "close window to cancel delete logs"
 					read \n
 				bash R1-HD-TOOL.sh
 				exit
