@@ -79,7 +79,9 @@ GOTO fastboot_check2
     echo Found ADB!
 	adb reboot bootloader
 	timeout 10)
-GOTO fastboot_check2
+	adb reboot bootloader
+	timeout 10
+	GOTO fastboot_check2
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :fastboot_check2
 	fastboot devices -l | find "fastboot" >nul
