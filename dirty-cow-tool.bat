@@ -316,10 +316,12 @@ IF ERRORLEVEL 1 GOTO 10
 echo you chose to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
 pause
 fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
+fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
 GOTO recovery
 :20
 echo you chose not to instal Lopestom Ported recovery && echo %date% %time% [I] Lopestom's ported TWRP Recovery flashed. >> "%~dp0\dirty-cow-log\log.txt"
 pause
+fastboot flash recovery pushed/recovery.img
 fastboot flash recovery pushed/recovery.img
 :recovery
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
@@ -412,7 +414,9 @@ SET RETURN=Label5
 GOTO adb_check
 :Label5
 adb reboot recovery
-adb wait-for-device
+::adb wait-for-device
+echo "press any button when recovery has fully loaded"
+pause
 adb push pushed/UPDATE-SuperSU-v2.76-20160630161323.zip /sdcard/Download
 adb shell "/sbin;recovery -- update_package=/sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip"
 pause
@@ -425,7 +429,9 @@ SET RETURN=Label6
 GOTO adb_check
 :Label6
 adb reboot recovery
-adb wait-for-device
+::adb wait-for-device
+echo "press any button when recovery has fully loaded"
+pause
 adb push pushed/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip /sdcard/Download
 adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
@@ -439,7 +445,9 @@ SET RETURN=Label7
 GOTO adb_check
 :Label7
 adb reboot recovery
-adb wait-for-device
+::adb wait-for-device
+echo "press any button when recovery has fully loaded"
+pause
 adb push pushed/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip /sdcard/Download
 adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
@@ -453,7 +461,9 @@ SET RETURN=Label8
 GOTO adb_check
 :Label8
 adb reboot recovery
-adb wait-for-device
+::adb wait-for-device
+echo "press any button when recovery has fully loaded"
+pause
 adb push pushed/bluR1-GOOGLE-debloat_v2.zip /sdcard/Download
 adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-GOOGLE-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
@@ -467,7 +477,9 @@ SET RETURN=Label9
 GOTO adb_check
 :Label9
 adb reboot recovery
-adb wait-for-device
+::adb wait-for-device
+echo "press any button when recovery has fully loaded"
+pause
 adb push pushed/bluR1-MTK_BLU-debloat_v2.zip /sdcard/Download
 adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
@@ -481,7 +493,9 @@ SET RETURN=Label10
 GOTO adb_check
 :Label10
 adb reboot recovery
-adb wait-for-device
+::adb wait-for-device
+echo "press any button when recovery has fully loaded"
+pause
 adb push pushed/bluR1-RestoreApps-OTA.zip /sdcard/Download
 adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-RestoreApps-OTA.zip"
 echo coming soon
@@ -495,7 +509,9 @@ SET RETURN=Label11
 GOTO adb_check
 :Label11
 adb reboot recovery
-adb wait-for-device
+::adb wait-for-device
+echo "press any button when recovery has fully loaded"
+pause
 adb push pushed/fm_Radio_WITHOUT_boot.zip /sdcard/Download
 adb shell "sbin;recovery -- update_package=/sdcard/Download/fm_Radio_WITHOUT_boot.zip"
 echo Also need to install A program called selinux mode changer
@@ -512,7 +528,9 @@ SET RETURN=Label12
 GOTO adb_check
 :Label12
 adb reboot recovery
-adb wait-for-device
+::adb wait-for-device
+echo "press any button when recovery has fully loaded"
+pause
 adb push pushed/after_bootloader_roll_back_5.zip /sdcard/Download
 adb shell "/sbin;recovery -- update_package=/sdcard/Download/after_bootloader_roll_back_5.zip"
 echo It is likely that at this point phone is Boot-looping 
