@@ -102,22 +102,22 @@ GOTO adb_check
 echo [*] clear tmp folder
 adb shell rm -f /data/local/tmp/*
 echo [*] copying dirtycow to /data/local/tmp/dirtycow
-adb push pushed/dirtycow /data/local/tmp/dirtycow
+adb push %~dp0\pushed\dirtycow /data/local/tmp/dirtycow
 timeout 3
 echo [*] copying recowvery-app_process32 to /data/local/tmp/recowvery-app_process32
-adb push pushed/recowvery-app_process32 /data/local/tmp/recowvery-app_process32
+adb push %~dp0\pushed\recowvery-app_process32 /data/local/tmp/recowvery-app_process32
 timeout 3
 echo [*] copying frp.bin to /data/local/tmp/unlock
-adb push pushed/frp.bin /data/local/tmp/unlock
+adb push %~dp0\pushed\frp.bin /data/local/tmp/unlock
 timeout 3
 echo [*] copying busybox to /data/local/tmp/busybox
-adb push pushed/busybox /data/local/tmp/busybox
+adb push %~dp0\pushed\busybox /data/local/tmp/busybox
 timeout 3
 echo [*] copying cp_comands.txt to /data/local/tmp/cp_comands.txt
-adb push pushed/cp_comands.txt /data/local/tmp/cp_comands.txt
+adb push %~dp0\pushed\cp_comands.txt /data/local/tmp/cp_comands.txt
 timeout 3
 echo [*] copying dd_comands.txt to /data/local/tmp/dd_comands.txt
-adb push pushed/dd_comands.txt /data/local/tmp/dd_comands.txt
+adb push %~dp0\pushed\dd_comands.txt /data/local/tmp/dd_comands.txt
 timeout 3
 echo [*] changing permissions on copied files
 adb shell chmod 0777 /data/local/tmp/*
@@ -315,14 +315,14 @@ IF ERRORLEVEL 1 GOTO 10
 :10
 echo you chose to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
 pause
-fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
-fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
+fastboot flash recovery %~dp0\pushed\twrp_p6601_7.1_recovery.img
+fastboot flash recovery %~dp0\pushed\twrp_p6601_7.1_recovery.img
 GOTO recovery
 :20
 echo you chose not to instal Lopestom Ported recovery && echo %date% %time% [I] Lopestom's ported TWRP Recovery flashed. >> "%~dp0\dirty-cow-log\log.txt"
 pause
-fastboot flash recovery pushed/recovery.img
-fastboot flash recovery pushed/recovery.img
+fastboot flash recovery %~dp0\pushed\recovery.img
+fastboot flash recovery %~dp0\pushed\recovery.img
 :recovery
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
 echo [*]
@@ -417,7 +417,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push pushed/UPDATE-SuperSU-v2.76-20160630161323.zip /sdcard/Download
+adb push %~dp0\pushed\UPDATE-SuperSU-v2.76-20160630161323.zip /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip"
 pause
 goto main
@@ -432,7 +432,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push pushed/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip /sdcard/Download
+adb push %~dp0\pushed\bluR1-AMZ-FULLdebloat-blockOTA_v2.zip /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -448,7 +448,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push pushed/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip /sdcard/Download
+adb push %~dp0\pushed\bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -464,7 +464,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push pushed/bluR1-GOOGLE-debloat_v2.zip /sdcard/Download
+adb push %~dp0\pushed\bluR1-GOOGLE-debloat_v2.zip /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-GOOGLE-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -480,7 +480,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push pushed/bluR1-MTK_BLU-debloat_v2.zip /sdcard/Download
+adb push %~dp0\pushed\bluR1-MTK_BLU-debloat_v2.zip /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -496,7 +496,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push pushed/bluR1-RestoreApps-OTA.zip /sdcard/Download
+adb push %~dp0\pushed\bluR1-RestoreApps-OTA.zip /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-RestoreApps-OTA.zip"
 echo coming soon
 pause
@@ -512,7 +512,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push pushed/fm_Radio_WITHOUT_boot.zip /sdcard/Download
+adb push %~dp0\pushed\fm_Radio_WITHOUT_boot.zip /sdcard/Download
 adb shell "sbin/recovery -- update_package=/sdcard/Download/fm_Radio_WITHOUT_boot.zip"
 echo Also need to install A program called selinux mode changer
 echo It is available from Either xda thread
@@ -531,7 +531,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push pushed/after_bootloader_roll_back_5.zip /sdcard/Download
+adb push %~dp0\pushed\after_bootloader_roll_back_5.zip /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/after_bootloader_roll_back_5.zip"
 echo It is likely that at this point phone is Boot-looping 
 echo At this point if looping Hold volume up during the boot-looping
