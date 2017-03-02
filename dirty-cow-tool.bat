@@ -418,7 +418,7 @@ adb reboot recovery
 echo "press any button when recovery has fully loaded"
 pause
 adb push pushed/UPDATE-SuperSU-v2.76-20160630161323.zip /sdcard/Download
-adb shell "/sbin;recovery -- update_package=/sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip"
+adb shell "/sbin/recovery -- update_package=/sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip"
 pause
 goto main
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -433,7 +433,7 @@ adb reboot recovery
 echo "press any button when recovery has fully loaded"
 pause
 adb push pushed/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip /sdcard/Download
-adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip"
+adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
 goto main
@@ -449,7 +449,7 @@ adb reboot recovery
 echo "press any button when recovery has fully loaded"
 pause
 adb push pushed/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip /sdcard/Download
-adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip"
+adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
 goto main
@@ -465,7 +465,7 @@ adb reboot recovery
 echo "press any button when recovery has fully loaded"
 pause
 adb push pushed/bluR1-GOOGLE-debloat_v2.zip /sdcard/Download
-adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-GOOGLE-debloat_v2.zip"
+adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-GOOGLE-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
 goto main
@@ -481,7 +481,7 @@ adb reboot recovery
 echo "press any button when recovery has fully loaded"
 pause
 adb push pushed/bluR1-MTK_BLU-debloat_v2.zip /sdcard/Download
-adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
+adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
 goto main
@@ -497,7 +497,7 @@ adb reboot recovery
 echo "press any button when recovery has fully loaded"
 pause
 adb push pushed/bluR1-RestoreApps-OTA.zip /sdcard/Download
-adb shell "/sbin;recovery -- update_package=/sdcard/Download/bluR1-RestoreApps-OTA.zip"
+adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-RestoreApps-OTA.zip"
 echo coming soon
 pause
 goto main
@@ -513,7 +513,7 @@ adb reboot recovery
 echo "press any button when recovery has fully loaded"
 pause
 adb push pushed/fm_Radio_WITHOUT_boot.zip /sdcard/Download
-adb shell "sbin;recovery -- update_package=/sdcard/Download/fm_Radio_WITHOUT_boot.zip"
+adb shell "sbin/recovery -- update_package=/sdcard/Download/fm_Radio_WITHOUT_boot.zip"
 echo Also need to install A program called selinux mode changer
 echo It is available from Either xda thread
 echo https://forum.xda-developers.com/devdb/project/dl/?id=12506
@@ -532,7 +532,7 @@ adb reboot recovery
 echo "press any button when recovery has fully loaded"
 pause
 adb push pushed/after_bootloader_roll_back_5.zip /sdcard/Download
-adb shell "/sbin;recovery -- update_package=/sdcard/Download/after_bootloader_roll_back_5.zip"
+adb shell "/sbin/recovery -- update_package=/sdcard/Download/after_bootloader_roll_back_5.zip"
 echo It is likely that at this point phone is Boot-looping 
 echo At this point if looping Hold volume up during the boot-looping
 echo you should be at the boot select menu now
