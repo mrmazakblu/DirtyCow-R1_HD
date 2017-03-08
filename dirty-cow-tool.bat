@@ -15,6 +15,7 @@ IF NOT EXIST "pushed\*.*" GOTO error
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
 cls
+adb kill-server
 echo( 
 echo 	***************************************************
 echo 	*                                                 *
@@ -60,7 +61,7 @@ PING -n 3 127.0.0.1>nul
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :adb_check
-adb devices -l | find "device product:" >nul
+adb devices -l | find "device product:" > "%~dp0\working\adb-device.txt" && echo %date% %time% >> "%~dp0\working\adb-device.txt"
 if errorlevel 1 (
     echo No adb connected devices && echo %date% %time% [E] No adb device detected, check phone state, or drivers. >> "%~dp0\dirty-cow-log\log.txt"
 	pause
@@ -71,12 +72,13 @@ if errorlevel 1 (
 GOTO %RETURN%	
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :fastboot_check
-adb devices -l | find "device product:" >nul
+adb devices -l | find "device product:" > "%~dp0\working\fast-adb-device.txt" && echo %date% %time% >> "%~dp0\working\fast-adb-device.txt"
 if errorlevel 1 (
     echo No adb connected devices
 GOTO fastboot_check2
 ) else (
     echo Found ADB!
+	pause
 	adb reboot bootloader
 	timeout 10)
 	adb reboot bootloader
@@ -84,7 +86,7 @@ GOTO fastboot_check2
 	GOTO fastboot_check2
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :fastboot_check2
-	fastboot devices -l | find "fastboot" >nul
+	fastboot devices -l | find "fastboot" > "%~dp0\working\fastboot-device.txt" && echo %date% %time% >> "%~dp0\working\fastboot-device.txt"
 if errorlevel 1 (
     echo No connected devices && echo %date% %time% [E] No fastboot device detected. >> "%~dp0\dirty-cow-log\log.txt"
 pause
@@ -215,7 +217,7 @@ echo [*]
 adb shell /data/local/tmp/dirtycow /data/local/test/frp /data/local/tmp/unlock
 timeout 5
 echo checking md5 of new frp before copying to mmcblk0p17
-adb shell /data/local/tmp/busybox md5sum /data/local/test/frp > "%~dp0\working\new_frp_md5.txt"
+adb shell /data/local/tmp/busybox md5sum /data/local/test/frp > "%~dp0\working\new_frp_md5.txt" $$ echo %date% %time% >> "%~dp0\working\new_frp_md5.txt"
 find "18ab1955384691a35b127a3eebd6ef72  /data/local/test/frp" "%~dp0\working\new_frp_md5.txt"
 if errorlevel 1 (
     echo new_frp_md5 does not match 
@@ -576,5 +578,24 @@ pause
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :end
 echo(
+echo( >> "%~dp0\dirty-cow-log\log.txt"
+echo adb-device  %date% %time%:::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+type "%~dp0\working\adb-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
+echo( >> "%~dp0\dirty-cow-log\log.txt"
+echo fast-adb-device  %date% %time%::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+type "%~dp0\working\fast-adb-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
+echo( >> "%~dp0\dirty-cow-log\log.txt"
+echo fastboot-device  %date% %time%::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+type "%~dp0\working\fastboot-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
+echo( >> "%~dp0\dirty-cow-log\log.txt"
+echo new-frp-md5  %date% %time%::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+type "%~dp0\working\new_frp_md5.txt" >> "%~dp0\dirty-cow-log\log.txt"
+echo( >> "%~dp0\dirty-cow-log\log.txt"
+echo Unlockability-number  %date% %time%:::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+type "%~dp0\working\unlockability.txt" >> "%~dp0\dirty-cow-log\log.txt"
+echo( >> "%~dp0\dirty-cow-log\log.txt"
+echo getvar  %date% %time%:::::::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+type "%~dp0\working\getvar.txt" >> "%~dp0\dirty-cow-log\log.txt"
+
 del "%~dp0\working\*.txt"
 PING -n 1 127.0.0.1>nul
