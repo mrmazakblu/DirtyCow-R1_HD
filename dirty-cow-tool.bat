@@ -1,3 +1,4 @@
+if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
 @echo off
 mode 100,40
 cd "%~dp0"
