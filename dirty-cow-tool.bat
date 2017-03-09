@@ -527,8 +527,20 @@ echo Also need to install A program called selinux mode changer
 echo It is available from Either xda thread
 echo https://forum.xda-developers.com/devdb/project/dl/?id=12506
 echo  or also from F-Droid
+echo script can now install this app
+CHOICE  /C YN  /M "Do You Want To install selinux mode changer with this script"
+IF ERRORLEVEL 2 GOTO 20
+IF ERRORLEVEL 1 GOTO 10
+
+:10
+echo selinux mode changer will now be installed (version from f-droid)
+adb install -r pushed\selinux.mode.chager.apk
 pause
 goto main
+:20
+echo mode changer not installed, Phone will need to be in permissive for radio to work
+pause
+GOTO main
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :preloader
@@ -553,7 +565,7 @@ goto continue_unlock
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :error
-echo Image File not Found!! && echo(%date% %time% [W] No files found in the pushed folder, Or pushed folder not where expected. Expected location is "%~dp0\pushed")  >> "%~dp0\dirty-cow-log\log.txt"
+echo Image File not Found!! && echo(%date% %time% [W] No files found in the pushed folder, Or pushed folder not where expected. Expected location is "%~dp0pushed")  >> "%~dp0\dirty-cow-log\log.txt"
 echo Check that you have unzipped the 
 echo whole Tool Package
 pause
