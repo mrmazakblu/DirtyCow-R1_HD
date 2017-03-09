@@ -7,7 +7,7 @@ adddate() {
     done
 }
 adb_check() {
-adb devices -l > working/adb_devices.txt
+$ADB devices -l > working/adb_devices.txt
 sleep 5
 if grep -q "product:" "working/adb_devices.txt"; then
 	echo adb device found
@@ -17,7 +17,7 @@ else
 	echo "No Adb devices found " | adddate  >> "log.txt"
 	echo "trying to return from fastboot"
 	fast_check
-	fastboot reboot
+	$FASTBOOT reboot
 	echo "sleeping some time to allow for reboot time"
 	sleep 30
 	adb_check
@@ -25,15 +25,15 @@ else
 fi
 }
 fast_check() {
-adb devices -l > working/adb_devices.txt
+$ADB devices -l > working/adb_devices.txt
 sleep 5
 if grep -q "product:" "working/adb_devices.txt"; then
 	echo adb device found
-	adb reboot bootloader
+	$ADB reboot bootloader
 	echo sleeping 10 seconds
 	sleep 20
 fi
-fastboot devices -l > working/fast_devices.txt
+$FASTBOOT devices -l > working/fast_devices.txt
 sleep 5
 if grep -q "fastboot" "working/fast_devices.txt"; then
 	echo fastboot detected
@@ -47,6 +47,26 @@ else
 	exit
 fi
 }
+function platform
+{       platform=`uname`
+        if [ $(uname -p) = 'powerpc' ]; then
+        echo "[-] PowerPC is not supported."
+        exit 1
+        fi
+ 
+        if [ "$platform" = 'Darwin' ]; then
+        ADB="files/./adbosx"
+        FASTBOOT="files/./fastbootosx"
+        version="OS X"
+        else
+        ADB="files/./adblinux"
+        FASTBOOT="files/./fastbootlinux"
+        version="Linux"
+               
+        fi
+}
+
+platform
 echo   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 echo   "          ____  _       _   _ ____     _____ ___   ___  _                 "
 echo   "         |  _ \/ |     | | | |  _ \   |_   _/ _ \ / _ \| |                "
@@ -69,36 +89,36 @@ select opt in "${options[@]}"
 				echo "press enter to continue"
 						read \n
 				echo [*] clear tmp folder
-				adb shell rm -f /data/local/tmp/*
+				$ADB shell rm -f /data/local/tmp/*
 				echo [*] copying dirtycow to /data/local/tmp/dirtycow
-				adb push pushed/dirtycow /data/local/tmp/dirtycow
+				$ADB push pushed/dirtycow /data/local/tmp/dirtycow
 				sleep 3
 				echo [*] copying recowvery-app_process32 to /data/local/tmp/recowvery-app_process32
-				adb push pushed/recowvery-app_process32 /data/local/tmp/recowvery-app_process32
+				$ADB push pushed/recowvery-app_process32 /data/local/tmp/recowvery-app_process32
 				sleep 3
 				echo [*] copying frp.bin to /data/local/tmp/unlock
-				adb push pushed/frp.bin /data/local/tmp/unlock
+				$ADB push pushed/frp.bin /data/local/tmp/unlock
 				sleep 3
 				echo [*] copying busybox to /data/local/tmp/busybox
-				adb push pushed/busybox /data/local/tmp/busybox
+				$ADB push pushed/busybox /data/local/tmp/busybox
 				sleep 3
 				echo [*] copying cp_comands.txt to /data/local/tmp/cp_comands.txt
-				adb push pushed/cp_comands.txt /data/local/tmp/cp_comands.txt
+				$ADB push pushed/cp_comands.txt /data/local/tmp/cp_comands.txt
 				sleep 3
 				echo [*] copying dd_comands.txt to /data/local/tmp/dd_comands.txt
-				adb push pushed/dd_comands.txt /data/local/tmp/dd_comands.txt
+				$ADB push pushed/dd_comands.txt /data/local/tmp/dd_comands.txt
 				sleep 3
 				echo [*] changing permissions on copied files
-				adb shell chmod 0777 /data/local/tmp/*
+				$ADB shell chmod 0777 /data/local/tmp/*
 				sleep 3
 				echo [*] checking contents of phone folder
-				adb shell ls -l /data/local/tmp > "working/phone_file_check.txt" 
-				adb shell /data/local/tmp/busybox md5sum /data/local/tmp/unlock > "working/phone_file_md5.txt"
-				adb shell /data/local/tmp/busybox md5sum /data/local/tmp/recowvery-app_process32 >> "working/phone_file_md5.txt"
-				adb shell /data/local/tmp/busybox md5sum /data/local/tmp/dirtycow >> "working/phone_file_md5.txt"
-				adb shell /data/local/tmp/busybox md5sum /data/local/tmp/dd_comands.txt >> "working/phone_file_md5.txt"
-				adb shell /data/local/tmp/busybox md5sum /data/local/tmp/cp_comands.txt >> "working/phone_file_md5.txt"
-				adb shell /data/local/tmp/busybox md5sum /data/local/tmp/busybox >> "working/phone_file_md5.txt"
+				$ADB shell ls -l /data/local/tmp > "working/phone_file_check.txt" 
+				$ADB shell /data/local/tmp/busybox md5sum /data/local/tmp/unlock > "working/phone_file_md5.txt"
+				$ADB shell /data/local/tmp/busybox md5sum /data/local/tmp/recowvery-app_process32 >> "working/phone_file_md5.txt"
+				$ADB shell /data/local/tmp/busybox md5sum /data/local/tmp/dirtycow >> "working/phone_file_md5.txt"
+				$ADB shell /data/local/tmp/busybox md5sum /data/local/tmp/dd_comands.txt >> "working/phone_file_md5.txt"
+				$ADB shell /data/local/tmp/busybox md5sum /data/local/tmp/cp_comands.txt >> "working/phone_file_md5.txt"
+				$ADB shell /data/local/tmp/busybox md5sum /data/local/tmp/busybox >> "working/phone_file_md5.txt"
 				sleep 5
 				if grep -q "b5eec83df6dd57902a857f6c542e793e  /data/local/tmp/busybox" "working/phone_file_md5.txt"; then
 					echo busybox matches md5
@@ -177,7 +197,7 @@ select opt in "${options[@]}"
 			"Run the Dirty-cow Part 2")
 				adb_check
 				echo "--------------------------------------------------------------------------------"
-				adb shell /data/local/tmp/dirtycow /system/bin/app_process32 /data/local/tmp/recowvery-app_process32
+				$ADB shell /data/local/tmp/dirtycow /system/bin/app_process32 /data/local/tmp/recowvery-app_process32
 				echo --------------------------------------------------------------------------------------------
 				echo "Dirty-cow started" | adddate >> log.txt
 				echo --------------------------------------------------------------------------------------------
@@ -192,13 +212,13 @@ select opt in "${options[@]}"
 				echo [*] CHANGING PERMISSIONS ON NEW DIRECTORY
 				echo [*] COPYING FRP PARTION TO NEW DIRECTORY AS ROOT
 				echo [*] CHANGING PERMISSIONS ON COPIED FRP
-				adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/cp_comands.txt"
+				$ADB shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/cp_comands.txt"
 				echo [*] COPYING UNLOCK.IMG OVER TOP OF COPIED FRP IN /data/local/test NOT AS ROOT WITH DIRTYCOW
 				echo [*]
-				adb shell /data/local/tmp/dirtycow /data/local/test/frp /data/local/tmp/unlock
+				$ADB shell /data/local/tmp/dirtycow /data/local/test/frp /data/local/tmp/unlock
 				sleep 5
 				echo checking md5 of new frp before copying to mmcblk0p17
-				adb shell /data/local/tmp/busybox md5sum /data/local/test/frp > "working/new_frp_md5.txt"
+				$ADB shell /data/local/tmp/busybox md5sum /data/local/test/frp > "working/new_frp_md5.txt"
 				if grep -q "18ab1955384691a35b127a3eebd6ef72  /data/local/test/frp" "working/new_frp_md5.txt"; then
 					echo new FRP matches md5
 				else
@@ -207,18 +227,18 @@ select opt in "${options[@]}"
 					echo "[W] New FRP final stage in dirty-cow does not match md5" | adddate >> "log.txt"
 					echo "press enter to exit"
 					read \n
-					adb reboot
+					$ADB reboot
 					bash R1-HD-TOOL.sh
 					exit
 				fi
 				echo "[*] WAITING 5 SECONDS BEFORE WRITING FRP TO EMMC"
 				sleep 5
 				echo "[*] DD COPY THE NEW (UNLOCK.IMG) FROM /data/local/test/frp TO PARTITION mmcblk0p17"
-				adb shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/dd_comands.txt"
+				$ADB shell "/data/local/tmp/busybox nc localhost 11112 < /data/local/tmp/dd_comands.txt"
 				echo "coping new frp is done phone will now reboot and script will return to start screen"
 				echo "press enter to exit"
 					read \n
-				adb reboot
+				$ADB reboot
 				sudo $ADB kill-server
 				bash R1-HD-TOOL.sh
 				exit 
@@ -226,18 +246,18 @@ select opt in "${options[@]}"
 			"Do Bootloader Unlock 3")
 				echo "--------------------------------------------------------------------------------"
 				fast_check
-				fastboot getvar all 2> "working/getvar.txt"
+				$FASTBOOT getvar all 2> "working/getvar.txt"
 				if grep -q "unlocked: yes" "working/getvar.txt"; then
 					echo "Already Unlocked Going Back to Menu"
 					echo "press enter to exit"
 					read \n
-					fastboot reboot
+					$FASTBOOT reboot
 					bash R1-HD-TOOL.sh
 					exit
 				else
 					echo "Not Unlocked Yet"
 				fi
-				fastboot flashing get_unlock_ability 2> "working/unlockability.txt"
+				$FASTBOOT flashing get_unlock_ability 2> "working/unlockability.txt"
 				sed -i '3,4d' working/unlockability.txt
 				sed -i '1d' working/unlockability.txt
 				sed -i 's/[^0-9]//g' working/unlockability.txt
@@ -250,7 +270,7 @@ select opt in "${options[@]}"
 					echo "press enter to exit"
 					echo "Phone Failed unlockability check"  | adddate >> log.txt
 					read \n
-					fastboot reboot
+					$FASTBOOT reboot
 					bash R1-HD-TOOL.sh
 					exit
 				fi
@@ -261,13 +281,13 @@ select opt in "${options[@]}"
 				echo "-------------------------------------------------------------------------"
 				echo "[*] press enter to continue"
 					read \n
-				fastboot oem unlock
+				$FASTBOOT oem unlock
 				sleep 5
-				fastboot format userdata
+				$FASTBOOT format userdata
 				sleep 5
-				fastboot format cache
+				$FASTBOOT format cache
 				sleep 5
-				fastboot reboot
+				$FASTBOOT reboot
 				echo "OEM UNLOCK HAS BEEN RUN and userdata formated" | adddate >> log.txt
 				echo "[*]         IF PHONE DID NOT REBOOT ON ITS OWN" 
 				echo "[*]         HOLD POWER BUTTON UNTILL IT TURNS OFF"
@@ -282,7 +302,7 @@ select opt in "${options[@]}"
 			;;
 			"Flash TWRP 4")
 				fast_check
-				fastboot getvar all 2> "working/getvar.txt"
+				$FASTBOOT getvar all 2> "working/getvar.txt"
 				if grep -q "unlocked: yes" "working/getvar.txt"; then
 					echo "Already Unlocked Going to continue"
 				else
@@ -290,7 +310,7 @@ select opt in "${options[@]}"
 					echo "press enter to exit"
 					echo "Recovery attempted to install when bootloader shows locked" | adddate >> log.txt
 					echo read \n
-					fastboot reboot
+					$FASTBOOT reboot
 					bash R1-HD-TOOL.sh
 					exit
 				fi
@@ -305,14 +325,14 @@ select opt in "${options[@]}"
 										echo "--------------------------------------------------------------------------------"
 										echo "you chose to instal Vampirefo-s V7.1 built recovery" 
 										echo "[I] Vamirefo-s v7.1 TWRP Recovery flashed" | adddate >> log.txt
-										fastboot flash recovery pushed/twrp_p6601_7.1_recovery.img
+										$FASTBOOT flash recovery pushed/twrp_p6601_7.1_recovery.img
 										echo "[*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC" 
 										echo "[*]"
 										echo "[*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES"
 										echo "[*] ON PHONE SELECT RECOVERY FROM BOOT MENU WITH VOLUME KEY THEN SELECT WITH POWER"
 										echo "[*] press enter to continue"
 										read \n
-										fastboot reboot
+										$FASTBOOT reboot
 										bash R1-HD-TOOL.sh
 										exit
 									;;
@@ -320,13 +340,13 @@ select opt in "${options[@]}"
 										echo "--------------------------------------------------------------------------------"
 										echo "you chose to instal Lopestom original ported twrp"
 										echo "[I] Lopestom TWRP Recovery flashed" | adddate >> log.txt
-										fastboot flash recovery pushed/recovery.img
+										$FASTBOOT flash recovery pushed/recovery.img
 										echo "[*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC" 
 										echo "[*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES"
 										echo "[*] ON PHONE SELECT RECOVERY FROM BOOT MENU WITH VOLUME KEY THEN SELECT WITH POWER"
 										echo "[*] press enter to continue"
 										read \n
-										fastboot reboot
+										$FASTBOOT reboot
 										bash R1-HD-TOOL.sh
 										exit
 									;;
