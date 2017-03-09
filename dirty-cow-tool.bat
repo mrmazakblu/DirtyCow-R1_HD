@@ -1,28 +1,30 @@
 @echo off
+mode 100,40
 cd "%~dp0"
 IF EXIST "%~dp0\pushed" SET PATH=%PATH%;"%~dp0\pushed"
 IF EXIST "%~dp0\working" SET PATH=%PATH%;"%~dp0\working"
+IF NOT EXIST working mkdir "%~dp0\working"
+IF NOT EXIST dirty-cow-log mkdir "%~dp0\dirty-cow-log"
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Setlocal EnableDelayedExpansion
 attrib +h "pushed" >nul
 attrib +h "working" >nul
 attrib +h "dirty-cow-log" >nul
-attrib +h "adb.exe" >nul
-attrib +h "fastboot.exe" >nul
-attrib +h "AdbWinApi.dll" >nul
-attrib +h "AdbWinUsbApi.dll" >nul
 IF NOT EXIST "pushed\*.*" GOTO error 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
 cls
 adb kill-server
-echo( 
-echo 	***************************************************
-echo 	*                                                 *
-echo 	*      R1-HD Bootloader Unlock Tool               *
-echo 	*                                                 *
-echo 	***************************************************
 echo(
+echo   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+echo   "          ____  _       _   _ ____     _____ ___   ___  _                 "
+echo   "         |  _ \/ |     | | | |  _ \   |_   _/ _ \ / _ \| |                "
+echo   "         | |_) | |_____| |_| | | | |    | || | | | | | | |                "
+echo   "         |  _ <| |_____|  _  | |_| |    | || |_| | |_| | |___             "
+echo   "         |_| \_\_|     |_| |_|____/     |_| \___/ \___/|_____|            "
+echo   "                                                                          "
+echo   "                                                                          "
+echo   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 echo 		 Choose what you need to work on.
 echo(
 echo 		][********************************][
@@ -366,11 +368,15 @@ GOTO main
 :second
 cls
 echo( 
-echo 	***************************************************
-echo 	*                                                 *
-echo 	*      R1-HD Bootloader Unlock Tool               *
-echo 	*                                                 *
-echo 	***************************************************
+echo   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+echo   "          ____  _       _   _ ____     _____ ___   ___  _                 "
+echo   "         |  _ \/ |     | | | |  _ \   |_   _/ _ \ / _ \| |                "
+echo   "         | |_) | |_____| |_| | | | |    | || | | | | | | |                "
+echo   "         |  _ <| |_____|  _  | |_| |    | || |_| | |_| | |___             "
+echo   "         |_| \_\_|     |_| |_|____/     |_| \___/ \___/|_____|            "
+echo   "                                                                          "
+echo   "                                                                          "
+echo   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 echo(
 echo 		 Choose what you need to work on.
 echo(
@@ -578,24 +584,24 @@ pause
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :end
 echo(
-echo( >> "%~dp0\dirty-cow-log\log.txt"
-echo adb-device  %date% %time%:::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
-type "%~dp0\working\adb-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
-echo( >> "%~dp0\dirty-cow-log\log.txt"
-echo fast-adb-device  %date% %time%::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
-type "%~dp0\working\fast-adb-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
-echo( >> "%~dp0\dirty-cow-log\log.txt"
-echo fastboot-device  %date% %time%::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
-type "%~dp0\working\fastboot-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
-echo( >> "%~dp0\dirty-cow-log\log.txt"
-echo new-frp-md5  %date% %time%::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
-type "%~dp0\working\new_frp_md5.txt" >> "%~dp0\dirty-cow-log\log.txt"
-echo( >> "%~dp0\dirty-cow-log\log.txt"
-echo Unlockability-number  %date% %time%:::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
-type "%~dp0\working\unlockability.txt" >> "%~dp0\dirty-cow-log\log.txt"
-echo( >> "%~dp0\dirty-cow-log\log.txt"
-echo getvar  %date% %time%:::::::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
-type "%~dp0\working\getvar.txt" >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\adb-device.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\adb-device.txt" echo adb-device  %date% %time%:::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\adb-device.txt" type "%~dp0\working\adb-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\adb-device.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\fast-adb-device.txt" echo fast-adb-device  %date% %time%::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\fast-adb-device.txt" type "%~dp0\working\fast-adb-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\fast-adb-device.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\fastboot-device.txt" echo fastboot-device  %date% %time%::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\fastboot-device.txt" type "%~dp0\working\fastboot-device.txt" >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\fastboot-device.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\new_frp_md5.txt" echo new-frp-md5  %date% %time%::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\new_frp_md5.txt" type "%~dp0\working\new_frp_md5.txt" >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\new_frp_md5.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\unlockability.txt" echo Unlockability-number  %date% %time%:::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\unlockability.txt" type "%~dp0\working\unlockability.txt" >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\unlockability.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\getvar.txt" echo getvar  %date% %time%:::::::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\getvar.txt" type "%~dp0\working\getvar.txt" >> "%~dp0\dirty-cow-log\log.txt"
 
 del "%~dp0\working\*.txt"
 PING -n 1 127.0.0.1>nul

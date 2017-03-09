@@ -1,0 +1,21 @@
+*******************************************************************************************
+*******************************************************************************************
+BEFORE YOU CAN USE THIS TOOL YOU MUST HAVE ADB AND FASTBOOT SETUP ON YOUR PC.
+THE EASIEST WAY TO GET STARTED WITH THIS IS TO USE THE 15 SECOND INSTALL SCRIPT 
+ON THIS XDA THREAD https://forum.xda-developers.com/showthread.php?t=2588979
+AFTER INSTALLING THE ADB AND FASTBOOT YOU SHOULD VERIFY IT IS WORKING.
+OPEN A COMMANDPROMT AND CHECK FOR ADB CONNECTION WITH "adb devices"
+IF THIS SHOWS CONNECTED THEN ISSUE "adb reboot bootloader" TO BOOT PHONE INTO 
+FASTBOOT MODE. THEN CHECK FOR CONNECTION WITH "fastboot devices", IF THIS SHOWS
+CONNECTED THEN YOU CAN CONTINUE TO USE THE TOOL.
+
+
+THE TOOL IS TO BE USED IN ORDER "1-2-3-4" THEN "5" FOR THE SECOND PAGE OPTIONS 1-8 AS DESIRED.
+EACH STEP HAS NOTES AND PROMTS TO GUIDE YOU THROUGH. SOME STEPS REQUIRE YOU TO PRESS BUTTONS ON 
+THE PHONE. AND DEPENDING ON THE LITTLE KERNEL (LK.BIN) THAT IS ON YOUR PHONE, THERE MAY BE 
+A NEED TO MANUALLY REBOOT THE PHONE BECAUSE THE REBOOT COMMAND MIGHT NOT WORK.
+
+*********************************************************************************************
+*********************************************************************************************
+
+
