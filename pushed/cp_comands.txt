@@ -1,10 +1,14 @@
 echo #mkdir /data/local/test
 mkdir /data/local/test
+mkdir /data/local/test
 echo #/system/bin/chmod 0777 /data/local/test
+/system/bin/chmod 0777 /data/local/test
 /system/bin/chmod 0777 /data/local/test
 echo #cp /dev/block/mmcblk0p17 /data/local/test/frp
 cp /dev/block/mmcblk0p17 /data/local/test/frp
+cp /dev/block/mmcblk0p17 /data/local/test/frp
 echo #/system/bin/chmod 0777 /data/local/test/frp
+/system/bin/chmod 0777 /data/local/test/frp
 /system/bin/chmod 0777 /data/local/test/frp
 echo #ls -l /data/local/test
 ls -l /data/local/test

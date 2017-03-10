@@ -71,6 +71,7 @@ if errorlevel 1 (
 	GOTO main
 ) else (
     echo Found ADB!)
+timeout 3
 :: (emulated "Return")
 GOTO %RETURN%	
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -81,9 +82,10 @@ if errorlevel 1 (
 GOTO fastboot_check2
 ) else (
     echo Found ADB!
-	pause
+	timeout 3
 	adb reboot bootloader
 	timeout 10)
+	echo running reboot second time just in case if failed first time
 	adb reboot bootloader
 	timeout 10
 	GOTO fastboot_check2
@@ -96,6 +98,7 @@ pause
 goto main
 ) else (
     echo Found FASTBOOT!)
+timeout 3
 :: (emulated "Return")
 GOTO %RETURN%
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -107,22 +110,22 @@ GOTO adb_check
 echo [*] clear tmp folder
 adb shell rm -f /data/local/tmp/*
 echo [*] copying dirtycow to /data/local/tmp/dirtycow
-adb push %~dp0\pushed\dirtycow /data/local/tmp/dirtycow
+adb push "%~dp0\pushed\dirtycow" /data/local/tmp/dirtycow
 timeout 3
 echo [*] copying recowvery-app_process32 to /data/local/tmp/recowvery-app_process32
-adb push %~dp0\pushed\recowvery-app_process32 /data/local/tmp/recowvery-app_process32
+adb push "%~dp0\pushed\recowvery-app_process32" /data/local/tmp/recowvery-app_process32
 timeout 3
 echo [*] copying frp.bin to /data/local/tmp/unlock
-adb push %~dp0\pushed\frp.bin /data/local/tmp/unlock
+adb push "%~dp0\pushed\frp.bin" /data/local/tmp/unlock
 timeout 3
 echo [*] copying busybox to /data/local/tmp/busybox
-adb push %~dp0\pushed\busybox /data/local/tmp/busybox
+adb push "%~dp0\pushed\busybox" /data/local/tmp/busybox
 timeout 3
 echo [*] copying cp_comands.txt to /data/local/tmp/cp_comands.txt
-adb push %~dp0\pushed\cp_comands.txt /data/local/tmp/cp_comands.txt
+adb push "%~dp0\pushed\cp_comands.txt" /data/local/tmp/cp_comands.txt
 timeout 3
 echo [*] copying dd_comands.txt to /data/local/tmp/dd_comands.txt
-adb push %~dp0\pushed\dd_comands.txt /data/local/tmp/dd_comands.txt
+adb push "%~dp0\pushed\dd_comands.txt" /data/local/tmp/dd_comands.txt
 timeout 3
 echo [*] changing permissions on copied files
 adb shell chmod 0777 /data/local/tmp/*
@@ -149,7 +152,7 @@ if errorlevel 1 (
 	GOTO main
 ) else (
     echo busybox matches md5)
-find "df5cf88006478ad421028c58df5a55ad  /data/local/tmp/cp_comands.txt" "%~dp0\working\phone_file_md5.txt"
+find "a2042a54e0df3442730b7c1e2b5c3df7  /data/local/tmp/cp_comands.txt" "%~dp0\working\phone_file_md5.txt"
 if errorlevel 1 (
     echo cp_comands.txt file does not match 
 	echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
@@ -204,10 +207,15 @@ adb shell /data/local/tmp/dirtycow /system/bin/app_process32 /data/local/tmp/rec
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
 echo.--------------------------------------------------------------------------------------------
-echo [*]WAITING 60 SECONDS FOR ROOT SHELL TO SPAWN
+echo [*]WAITING 60 SECONDS FOR ROOT SHELL TO SPAWN ** REPEARTED THREE TIMES JUST IN CASE
 echo [*] WHILE APP_PROCESS IS REPLACED PHONE WILL APPEAR TO BE UNRESPONSIVE BUT SHELL IS WORKING
 timeout 60
-pause
+echo [*] SOMETIMES IT TAKES LONGER TO SPAWN A SHELL SO NOW WE WAIT AGAIN
+echo [*] AFTER YOU HEAR THE BOOT UP SOUND YOU CAN SKIP PAST THE TIMEOUT BY PRESSING ANY BUTTON
+timeout 60
+echo [*] SOMETIMES IT TAKES LONGER TO SPAWN A SHELL SO NOW WE WAIT AGAIN
+echo [*] AFTER YOU HEAR THE BOOT UP SOUND YOU CAN SKIP PAST THE TIMEOUT BY PRESSING ANY BUTTON
+timeout 60
 echo.--------------------------------------------------------------------------------------------
 echo [*] OPENING A ROOT SHELL ON THE NEWLY CREATED SYSTEM_SERVER
 echo [*] MAKING A DIRECTORY ON PHONE TO COPY FRP PARTION TO 
@@ -220,7 +228,7 @@ echo [*]
 adb shell /data/local/tmp/dirtycow /data/local/test/frp /data/local/tmp/unlock
 timeout 5
 echo checking md5 of new frp before copying to mmcblk0p17
-adb shell /data/local/tmp/busybox md5sum /data/local/test/frp > "%~dp0\working\new_frp_md5.txt" $$ echo %date% %time% >> "%~dp0\working\new_frp_md5.txt"
+adb shell /data/local/tmp/busybox md5sum /data/local/test/frp > "%~dp0\working\new_frp_md5.txt"
 find "18ab1955384691a35b127a3eebd6ef72  /data/local/test/frp" "%~dp0\working\new_frp_md5.txt"
 if errorlevel 1 (
     echo new_frp_md5 does not match 
@@ -262,10 +270,11 @@ GOTO main
 ::checking the get_unlock_ability output string to verify it is greater than "0" because "0" is unlockable
 ::::::::::::::::::::::::::::::::::::
 fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
-for /f "tokens=4" %%i in ('findstr "^(bootloader) unlock_ability" %~dp0\working\unlockability.txt') do set unlock=%%i
+for /f "tokens=4" %%i in ('findstr "^(bootloader) unlock_ability" "%~dp0\working\unlockability.txt"') do set unlock=%%i
 echo output from find string = %unlock%
 if %unlock% gtr 1 ( 
 echo unlockable
+pause
 GOTO Continue
 ) else (
 echo Not-unlockable
@@ -320,14 +329,14 @@ IF ERRORLEVEL 1 GOTO 10
 :10
 echo you chose to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
 pause
-fastboot flash recovery %~dp0\pushed\twrp_p6601_7.1_recovery.img
-fastboot flash recovery %~dp0\pushed\twrp_p6601_7.1_recovery.img
+fastboot flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
+fastboot flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
 GOTO recovery
 :20
 echo you chose not to instal Lopestom Ported recovery && echo %date% %time% [I] Lopestom's ported TWRP Recovery flashed. >> "%~dp0\dirty-cow-log\log.txt"
 pause
-fastboot flash recovery %~dp0\pushed\recovery.img
-fastboot flash recovery %~dp0\pushed\recovery.img
+fastboot flash recovery "%~dp0\pushed\recovery.img"
+fastboot flash recovery "%~dp0\pushed\recovery.img"
 :recovery
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
 echo [*]
@@ -426,7 +435,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push %~dp0\pushed\UPDATE-SuperSU-v2.76-20160630161323.zip /sdcard/Download
+adb push "%~dp0\pushed\UPDATE-SuperSU-v2.76-20160630161323.zip" /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip"
 pause
 goto main
@@ -441,7 +450,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push %~dp0\pushed\bluR1-AMZ-FULLdebloat-blockOTA_v2.zip /sdcard/Download
+adb push "%~dp0\pushed\bluR1-AMZ-FULLdebloat-blockOTA_v2.zip" /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -457,7 +466,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push %~dp0\pushed\bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip /sdcard/Download
+adb push "%~dp0\pushed\bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip" /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -473,7 +482,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push %~dp0\pushed\bluR1-GOOGLE-debloat_v2.zip /sdcard/Download
+adb push "%~dp0\pushed\bluR1-GOOGLE-debloat_v2.zip" /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-GOOGLE-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -489,7 +498,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push %~dp0\pushed\bluR1-MTK_BLU-debloat_v2.zip /sdcard/Download
+adb push "%~dp0\pushed\bluR1-MTK_BLU-debloat_v2.zip" /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -505,7 +514,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push %~dp0\pushed\bluR1-RestoreApps-OTA.zip /sdcard/Download
+adb push "%~dp0\pushed\bluR1-RestoreApps-OTA.zip" /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-RestoreApps-OTA.zip"
 echo coming soon
 pause
@@ -521,7 +530,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push %~dp0\pushed\fm_Radio_WITHOUT_boot.zip /sdcard/Download
+adb push "%~dp0\pushed\fm_Radio_WITHOUT_boot.zip" /sdcard/Download
 adb shell "sbin/recovery -- update_package=/sdcard/Download/fm_Radio_WITHOUT_boot.zip"
 echo Also need to install A program called selinux mode changer
 echo It is available from Either xda thread
@@ -552,7 +561,7 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push %~dp0\pushed\after_bootloader_roll_back_5.zip /sdcard/Download
+adb push "%~dp0\pushed\after_bootloader_roll_back_5.zip" /sdcard/Download
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/after_bootloader_roll_back_5.zip"
 echo It is likely that at this point phone is Boot-looping 
 echo At this point if looping Hold volume up during the boot-looping
