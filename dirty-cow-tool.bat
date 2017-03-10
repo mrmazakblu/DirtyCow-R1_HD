@@ -109,9 +109,7 @@ GOTO adb_check
 :Label1
 echo [*] clear tmp folder
 adb shell rm -f /data/local/tmp/*
-::echo [*] copying dirtycow.fast to /data/local/tmp/dirtycow
 echo [*] copying dirtycow to /data/local/tmp/dirtycow
-::adb push "%~dp0\pushed\dirtycow.fast" /data/local/tmp/dirtycow
 adb push "%~dp0\pushed\dirtycow" /data/local/tmp/dirtycow
 timeout 3
 echo [*] copying recowvery-app_process32 to /data/local/tmp/recowvery-app_process32
@@ -170,8 +168,7 @@ if errorlevel 1 (
 	GOTO main
 ) else (
     echo dd_comands.txt matches md5)
-::find "8259b595dbfa9cea131bd798ad4ef323  /data/local/tmp/dirtycow" "%~dp0\working\phone_file_md5.txt"
-find "651d251e80a6b176ceddf7353ffe133d  /data/local/tmp/dirtycow" "%~dp0\working\phone_file_md5.txt"
+find "8259b595dbfa9cea131bd798ad4ef323  /data/local/tmp/dirtycow" "%~dp0\working\phone_file_md5.txt"
 if errorlevel 1 (
     echo dirtycow file does not match 
 	echo need to push files again maybe need to download zip file again too && echo %date% %time% [W] Files pushed to phone do not match reference file. >> "%~dp0\dirty-cow-log\log.txt"
