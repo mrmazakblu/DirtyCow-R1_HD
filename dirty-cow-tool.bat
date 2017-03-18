@@ -91,7 +91,7 @@ GOTO fastboot_check2
 	GOTO fastboot_check2
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :fastboot_check2
-	fastboot devices -l | find "fastboot" > "%~dp0\working\fastboot-device.txt" && echo %date% %time% >> "%~dp0\working\fastboot-device.txt"
+	files\fastboot devices -l | find "fastboot" > "%~dp0\working\fastboot-device.txt" && echo %date% %time% >> "%~dp0\working\fastboot-device.txt"
 if errorlevel 1 (
     echo No connected devices && echo %date% %time% [E] No fastboot device detected. >> "%~dp0\dirty-cow-log\log.txt"
 pause
@@ -255,7 +255,7 @@ GOTO fastboot_check
 :::::::::::::::::::::::::::::::::::
 ::checking the getvar output to verify if phone is unlocked aready
 :::::::::::::::::::::::::::::::::::::
-fastboot getvar all 2> "%~dp0\working\getvar.txt"
+files\fastboot getvar all 2> "%~dp0\working\getvar.txt"
 find "unlocked: yes" "%~dp0\working\getvar.txt"
 if errorlevel 1 (
     echo Not Unlocked 
@@ -269,7 +269,7 @@ GOTO main
 :::::::::::::::::::::::::::::::::::
 ::checking the get_unlock_ability output string to verify it is greater than "0" because "0" is unlockable
 ::::::::::::::::::::::::::::::::::::
-fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
+files\fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
 for /f "tokens=4" %%i in ('findstr "^(bootloader) unlock_ability" "%~dp0\working\unlockability.txt"') do set unlock=%%i
 echo output from find string = %unlock%
 if %unlock% gtr 1 ( 
@@ -288,13 +288,13 @@ echo [*] JUST PRESS VOLUME UP TO START THE UNLOCK PROCESS.
 echo.-------------------------------------------------------------------------
 echo.-------------------------------------------------------------------------
 pause
-fastboot oem unlock
+files\fastboot oem unlock
 timeout 5
-fastboot format userdata
+files\fastboot format userdata
 timeout 5
-fastboot format cache
+files\fastboot format cache
 timeout 5
-fastboot reboot
+files\fastboot reboot
 echo [*]         IF PHONE DID NOT REBOOT ON ITS OWN 
 echo [*]         HOLD POWER BUTTON UNTILL IT TURNS OFF
 echo [*]         THEN TURN IT BACK ON
@@ -312,7 +312,7 @@ GOTO fastboot_check
 :::::::::::::::::::::::::::::::::::
 ::checking the getvar output to verify if phone is unlocked aready
 :::::::::::::::::::::::::::::::::::::
-fastboot getvar all 2> "%~dp0\working\getvar.txt"
+files\fastboot getvar all 2> "%~dp0\working\getvar.txt"
 find "unlocked: yes" "%~dp0\working\getvar.txt"
 if errorlevel 1 (
     echo Not Unlocked 
@@ -329,20 +329,20 @@ IF ERRORLEVEL 1 GOTO 10
 :10
 echo you chose to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
 pause
-fastboot flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
-fastboot flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
+files\fastboot flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
+files\fastboot flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
 GOTO recovery
 :20
 echo you chose not to instal Lopestom Ported recovery && echo %date% %time% [I] Lopestom's ported TWRP Recovery flashed. >> "%~dp0\dirty-cow-log\log.txt"
 pause
-fastboot flash recovery "%~dp0\pushed\recovery.img"
-fastboot flash recovery "%~dp0\pushed\recovery.img"
+files\fastboot flash recovery "%~dp0\pushed\recovery.img"
+files\fastboot flash recovery "%~dp0\pushed\recovery.img"
 :recovery
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
 echo [*]
 echo [*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES
 pause
-fastboot reboot
+files\fastboot reboot
 echo [*] ON PHONE SELECT RECOVERY FROM BOOT MENU WITH VOLUME KEY THEN SELECT WITH POWER
 pause
 GOTO main
@@ -431,11 +431,11 @@ cls
 SET RETURN=Label5
 GOTO adb_check
 :Label5
+adb push "%~dp0\pushed\UPDATE-SuperSU-v2.76-20160630161323.zip" /sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip
 adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push "%~dp0\pushed\UPDATE-SuperSU-v2.76-20160630161323.zip" /sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/UPDATE-SuperSU-v2.76-20160630161323.zip"
 pause
 goto main
@@ -446,11 +446,11 @@ cls
 SET RETURN=Label6
 GOTO adb_check
 :Label6
+adb push "%~dp0\pushed\bluR1-AMZ-FULLdebloat-blockOTA_v2.zip" /sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip
 adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push "%~dp0\pushed\bluR1-AMZ-FULLdebloat-blockOTA_v2.zip" /sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-AMZ-FULLdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -462,11 +462,11 @@ cls
 SET RETURN=Label7
 GOTO adb_check
 :Label7
+adb push "%~dp0\pushed\bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip" /sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip
 adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push "%~dp0\pushed\bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip" /sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-AMZ-PARTIALdebloat-blockOTA_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -478,11 +478,11 @@ cls
 SET RETURN=Label8
 GOTO adb_check
 :Label8
+adb push "%~dp0\pushed\bluR1-GOOGLE-debloat_v2.zip" /sdcard/Download/bluR1-GOOGLE-debloat_v2.zip
 adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push "%~dp0\pushed\bluR1-GOOGLE-debloat_v2.zip" /sdcard/Download/bluR1-GOOGLE-debloat_v2.zip
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-GOOGLE-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -494,11 +494,11 @@ cls
 SET RETURN=Label9
 GOTO adb_check
 :Label9
+adb push "%~dp0\pushed\bluR1-MTK_BLU-debloat_v2.zip" /sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip
 adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push "%~dp0\pushed\bluR1-MTK_BLU-debloat_v2.zip" /sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
@@ -510,11 +510,11 @@ cls
 SET RETURN=Label10
 GOTO adb_check
 :Label10
+adb push "%~dp0\pushed\bluR1-RestoreApps-OTA.zip" /sdcard/Download/bluR1-RestoreApps-OTA.zip
 adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push "%~dp0\pushed\bluR1-RestoreApps-OTA.zip" /sdcard/Download/bluR1-RestoreApps-OTA.zip
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-RestoreApps-OTA.zip"
 echo coming soon
 pause
@@ -526,11 +526,11 @@ cls
 SET RETURN=Label11
 GOTO adb_check
 :Label11
+adb push "%~dp0\pushed\fm_Radio_WITHOUT_boot.zip" /sdcard/Download/fm_Radio_WITHOUT_boot.zip
 adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push "%~dp0\pushed\fm_Radio_WITHOUT_boot.zip" /sdcard/Download/fm_Radio_WITHOUT_boot.zip
 adb shell "sbin/recovery -- update_package=/sdcard/Download/fm_Radio_WITHOUT_boot.zip"
 echo Also need to install A program called selinux mode changer
 echo It is available from Either xda thread
@@ -557,11 +557,11 @@ cls
 SET RETURN=Label12
 GOTO adb_check
 :Label12
+adb push "%~dp0\pushed\after_bootloader_roll_back_5.zip" /sdcard/Download/after_bootloader_roll_back_5.zip
 adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb push "%~dp0\pushed\after_bootloader_roll_back_5.zip" /sdcard/Download/after_bootloader_roll_back_5.zip
 adb shell "/sbin/recovery -- update_package=/sdcard/Download/after_bootloader_roll_back_5.zip"
 echo It is likely that at this point phone is Boot-looping 
 echo At this point if looping Hold volume up during the boot-looping
