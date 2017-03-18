@@ -524,9 +524,10 @@ adb reboot recovery
 ::adb wait-for-device
 echo "press any button when recovery has fully loaded"
 pause
-adb shell "/sbin/recovery -- update_package=/sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
+adb shell "/sbin/twrp install /sdcard/Download/bluR1-MTK_BLU-debloat_v2.zip"
 echo debloat scripts curtesy of emc2cube
 pause
+adb reboot
 goto main
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
