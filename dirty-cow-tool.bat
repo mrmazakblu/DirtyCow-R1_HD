@@ -6,6 +6,27 @@ IF EXIST "%~dp0\pushed" SET PATH=%PATH%;"%~dp0\pushed"
 IF EXIST "%~dp0\working" SET PATH=%PATH%;"%~dp0\working"
 IF NOT EXIST working mkdir "%~dp0\working"
 IF NOT EXIST dirty-cow-log mkdir "%~dp0\dirty-cow-log"
+adb shell getprop ro.build.product > working\product.txt
+for /f %%i in ('FINDSTR "p6601 BLU_R1_HD" working\product.txt') do set device=%%i
+echo %device%
+find "p6601" "%~dp0\working\product.txt"
+if errorlevel 1 (
+    echo Not p6601 device
+GOTO next_check
+) else (
+    echo p6601 device)
+	pause
+GOTO main
+:next_check
+find "BLU_R1_HD" "%~dp0\working\product.txt"
+if errorlevel 1 (
+    echo Not BLU_R1_HD device
+goto end
+) else (
+    echo BLU_R1_HD device)
+	pause
+GOTO main
+::pause
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Setlocal EnableDelayedExpansion
 attrib +h "pushed" >nul
@@ -91,7 +112,7 @@ GOTO fastboot_check2
 	GOTO fastboot_check2
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :fastboot_check2
-	files\fastboot devices -l | find "fastboot" > "%~dp0\working\fastboot-device.txt" && echo %date% %time% >> "%~dp0\working\fastboot-device.txt"
+	files\fastboot.exe devices -l | find "fastboot" > "%~dp0\working\fastboot-device.txt" && echo %date% %time% >> "%~dp0\working\fastboot-device.txt"
 if errorlevel 1 (
     echo No connected devices && echo %date% %time% [E] No fastboot device detected. >> "%~dp0\dirty-cow-log\log.txt"
 pause
@@ -255,7 +276,7 @@ GOTO fastboot_check
 :::::::::::::::::::::::::::::::::::
 ::checking the getvar output to verify if phone is unlocked aready
 :::::::::::::::::::::::::::::::::::::
-files\fastboot getvar all 2> "%~dp0\working\getvar.txt"
+files\fastboot.exe getvar all 2> "%~dp0\working\getvar.txt"
 find "unlocked: yes" "%~dp0\working\getvar.txt"
 if errorlevel 1 (
     echo Not Unlocked 
@@ -269,7 +290,7 @@ GOTO main
 :::::::::::::::::::::::::::::::::::
 ::checking the get_unlock_ability output string to verify it is greater than "0" because "0" is unlockable
 ::::::::::::::::::::::::::::::::::::
-files\fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
+files\fastboot.exe flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
 for /f "tokens=4" %%i in ('findstr "^(bootloader) unlock_ability" "%~dp0\working\unlockability.txt"') do set unlock=%%i
 echo output from find string = %unlock%
 if %unlock% gtr 1 ( 
@@ -288,13 +309,13 @@ echo [*] JUST PRESS VOLUME UP TO START THE UNLOCK PROCESS.
 echo.-------------------------------------------------------------------------
 echo.-------------------------------------------------------------------------
 pause
-files\fastboot oem unlock
+files\fastboot.exe oem unlock
 timeout 5
-files\fastboot format userdata
+files\fastboot.exe format userdata
 timeout 5
-files\fastboot format cache
+files\fastboot.exe format cache
 timeout 5
-files\fastboot reboot
+files\fastboot.exe reboot
 echo [*]         IF PHONE DID NOT REBOOT ON ITS OWN 
 echo [*]         HOLD POWER BUTTON UNTILL IT TURNS OFF
 echo [*]         THEN TURN IT BACK ON
@@ -312,7 +333,7 @@ GOTO fastboot_check
 :::::::::::::::::::::::::::::::::::
 ::checking the getvar output to verify if phone is unlocked aready
 :::::::::::::::::::::::::::::::::::::
-files\fastboot getvar all 2> "%~dp0\working\getvar.txt"
+files\fastboot.exe getvar all 2> "%~dp0\working\getvar.txt"
 find "unlocked: yes" "%~dp0\working\getvar.txt"
 if errorlevel 1 (
     echo Not Unlocked 
@@ -329,20 +350,20 @@ IF ERRORLEVEL 1 GOTO 10
 :10
 echo you chose to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
 pause
-files\fastboot flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
-files\fastboot flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
+files\fastboot.exe flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
+files\fastboot.exe flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
 GOTO recovery
 :20
 echo you chose not to instal Lopestom Ported recovery && echo %date% %time% [I] Lopestom's ported TWRP Recovery flashed. >> "%~dp0\dirty-cow-log\log.txt"
 pause
-files\fastboot flash recovery "%~dp0\pushed\recovery.img"
-files\fastboot flash recovery "%~dp0\pushed\recovery.img"
+files\fastboot.exe flash recovery "%~dp0\pushed\recovery.img"
+files\fastboot.exe flash recovery "%~dp0\pushed\recovery.img"
 :recovery
 echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
 echo [*]
 echo [*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES
 pause
-files\fastboot reboot
+files\fastboot.exe reboot
 echo [*] ON PHONE SELECT RECOVERY FROM BOOT MENU WITH VOLUME KEY THEN SELECT WITH POWER
 pause
 GOTO main
@@ -624,6 +645,9 @@ IF EXIST "%~dp0\working\unlockability.txt" type "%~dp0\working\unlockability.txt
 IF EXIST "%~dp0\working\unlockability.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
 IF EXIST "%~dp0\working\getvar.txt" echo getvar  %date% %time%:::::::::::::::::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
 IF EXIST "%~dp0\working\getvar.txt" type "%~dp0\working\getvar.txt" >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\product.txt" echo product  %date% %time%:::::::::::::::::::::::::::::::: >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\product.txt" type "%~dp0\working\product.txt" >> "%~dp0\dirty-cow-log\log.txt"
+IF EXIST "%~dp0\working\product.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
 
 del "%~dp0\working\*.txt"
 PING -n 1 127.0.0.1>nul
