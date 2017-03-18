@@ -1,4 +1,6 @@
 if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
+adb kill-server
+adb start-server
 @echo off
 mode 100,40
 cd "%~dp0"
@@ -16,7 +18,7 @@ GOTO next_check
 ) else (
     echo p6601 device)
 	pause
-GOTO main
+GOTO beginning
 :next_check
 find "BLU_R1_HD" "%~dp0\working\product.txt"
 if errorlevel 1 (
@@ -25,9 +27,10 @@ goto end
 ) else (
     echo BLU_R1_HD device)
 	pause
-GOTO main
+GOTO beginning
 ::pause
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:beginning
 Setlocal EnableDelayedExpansion
 attrib +h "pushed" >nul
 attrib +h "working" >nul
@@ -37,6 +40,7 @@ IF NOT EXIST "pushed\*.*" GOTO error
 :main
 cls
 adb kill-server
+adb start-server
 echo(
 echo   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 echo   "          ____  _       _   _ ____     _____ ___   ___  _                 "
