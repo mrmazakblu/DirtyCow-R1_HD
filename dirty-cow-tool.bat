@@ -9,7 +9,7 @@ IF EXIST "%~dp0\working" SET PATH=%PATH%;"%~dp0\working"
 IF NOT EXIST working mkdir "%~dp0\working"
 IF NOT EXIST dirty-cow-log mkdir "%~dp0\dirty-cow-log"
 adb shell getprop ro.build.product > working\product.txt
-for /f %%i in ('FINDSTR "p6601 BLU_R1_HD" working\product.txt') do set device=%%i
+for /f %%i in ('FINDSTR "p6601 R1_HD" working\product.txt') do set device=%%i
 echo %device%
 find "p6601" "%~dp0\working\product.txt"
 if errorlevel 1 (
@@ -20,12 +20,12 @@ GOTO next_check
 	pause
 GOTO beginning
 :next_check
-find "BLU_R1_HD" "%~dp0\working\product.txt"
+find "R1_HD" "%~dp0\working\product.txt"
 if errorlevel 1 (
-    echo Not BLU_R1_HD device
+    echo Not R1_HD device
 goto end
 ) else (
-    echo BLU_R1_HD device)
+    echo R1_HD device)
 	pause
 GOTO beginning
 ::pause
@@ -656,3 +656,4 @@ IF EXIST "%~dp0\working\product.txt" echo( >> "%~dp0\dirty-cow-log\log.txt"
 
 del "%~dp0\working\*.txt"
 PING -n 1 127.0.0.1>nul
+exit
