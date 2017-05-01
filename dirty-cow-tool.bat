@@ -8,6 +8,17 @@ IF EXIST "%~dp0\pushed" SET PATH=%PATH%;"%~dp0\pushed"
 IF EXIST "%~dp0\working" SET PATH=%PATH%;"%~dp0\working"
 IF NOT EXIST working mkdir "%~dp0\working"
 IF NOT EXIST dirty-cow-log mkdir "%~dp0\dirty-cow-log"
+:first
+adb devices -l | find "device product:" > "%~dp0\working\adb-device.txt" && echo %date% %time% >> "%~dp0\working\adb-device.txt"
+if errorlevel 1 (
+    echo No adb connected 
+	echo IS PHONE STILL IN FASTBOOT MODE ?
+	echo IF SO PLEASE REBOOT BEFORE CONTINUEING
+	echo IF NOT THERE IS STILL PROBLEM WITH ADB DRIVERS,or WRITE PERMISSION TO /working folder
+	pause
+	GOTO first
+) else (
+    echo Found ADB!)
 adb shell getprop ro.build.product > working\product.txt
 for /f %%i in ('FINDSTR "p6601 R1_HD" working\product.txt') do set device=%%i
 echo %device%
@@ -355,20 +366,20 @@ IF ERRORLEVEL 1 GOTO 10
 echo you chose to instal Vampirefo 's V7.1 built recovery && echo %date% %time% [I] Vamirefo's v7.1 TWRP Recovery flashed . >> "%~dp0\dirty-cow-log\log.txt"
 pause
 files\fastboot.exe flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
-files\fastboot.exe flash recovery "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
+files\fastboot.exe boot "%~dp0\pushed\twrp_p6601_7.1_recovery.img"
 GOTO recovery
 :20
 echo you chose not to instal Lopestom Ported recovery && echo %date% %time% [I] Lopestom's ported TWRP Recovery flashed. >> "%~dp0\dirty-cow-log\log.txt"
 pause
 files\fastboot.exe flash recovery "%~dp0\pushed\recovery.img"
-files\fastboot.exe flash recovery "%~dp0\pushed\recovery.img"
+files\fastboot.exe boot "%~dp0\pushed\recovery.img"
 :recovery
-echo [*] ONCE THE FILE TRANSFER IS COMPLETE HOLD VOLUME UP AND PRESS ANY KEY ON PC 
-echo [*]
-echo [*] IF PHONE DOES NOT REBOOT THEN HOLD VOLUME UP AND POWER UNTILL IT DOES
+echo [*] 
+echo [*] ONCE THE PHONE BOOTS INTO RECOVERY SWIPE TO ALLOW MODIFICATION 
+echo [*] THEN PRESS BUTTON ON PC TO CONTINUE SCRIPT, WHICH WILL REBOOT TO RECOVERY AGAIN
 pause
-files\fastboot.exe reboot
-echo [*] ON PHONE SELECT RECOVERY FROM BOOT MENU WITH VOLUME KEY THEN SELECT WITH POWER
+adb reboot recovery
+echo [*] NOW RECOVERY HAS BEEN REBOOTED CAN CONTINUE TO NEXT STEP
 pause
 GOTO main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
